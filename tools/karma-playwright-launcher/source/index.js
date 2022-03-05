@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { chromium, firefox, webkit } = require("playwright");
 
 function PlaywrightBrowserFactory(browser) {
