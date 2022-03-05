@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "pnpm clean:build && pnpm build:commonjs && pnpm build:module && pnpm build:types && pnpm build:bundle",
-    "build:bundle": "webpack --config \"./webpack.config.js\"",
+    "build:bundle": "webpack",
     "build:commonjs": "tsc --project \"./tsconfig.commonjs.json\" && echo-cli {\\\"type\\\":\\\"commonjs\\\"} > \"./build/commonjs/package.json\"",
     "build:module": "tsc --project \"./tsconfig.module.json\" && echo-cli {\\\"type\\\":\\\"module\\\"} > \"./build/module/package.json\"",
     "build:types": "tsc --project \"./tsconfig.types.json\"",
@@ -32,21 +32,21 @@
     "clean:vendor": "del-cli \"./node_modules\"",
     "coverage:html": "pnpm clean:report && nyc report --reporter=html --report-dir=./report --temp-dir=./coverage",
     "coverage:json": "pnpm coverage:json:nodejs && pnpm coverage:json:browser && pnpm coverage:json:merge",
-    "coverage:json:browser": "KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT=json karma start \"../../karma.conf.js\"",
-    "coverage:json:chromium": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start \"../../karma.conf.js\"",
-    "coverage:json:firefox": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start \"../../karma.conf.js\"",
+    "coverage:json:browser": "cross-env KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT=json karma start \"../../karma.conf.js\"",
+    "coverage:json:chromium": "cross-env KARMA_BROWSER=Chromium KARMA_REPORT=json karma start \"../../karma.conf.js\"",
+    "coverage:json:firefox": "cross-env KARMA_BROWSER=Chromium KARMA_REPORT=json karma start \"../../karma.conf.js\"",
     "coverage:json:nodejs": "c8 --reporter=json --report-dir=./coverage/NodeJS mocha \"./source/index.test.*\"",
-    "coverage:json:webkit": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start \"../../karma.conf.js\"",
+    "coverage:json:webkit": "cross-env KARMA_BROWSER=Chromium KARMA_REPORT=json karma start \"../../karma.conf.js\"",
     "coverage:json:merge": "istanbul-merge --output=coverage/coverage-final.json \"coverage/*/coverage-final.json\"",
     "coverage:text": "nyc report --reporter=text --temp-dir=./coverage",
     "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx \"./source/**/*\"",
     "prepare": "pnpm lint && pnpm test && pnpm build",
     "test": "pnpm clean:coverage && pnpm coverage:json && pnpm coverage:text",
-    "test:browser": "KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT_COMBINE=1 karma start \"../../karma.conf.js\"",
-    "test:chromium": "KARMA_BROWSER=Chromium karma start \"../../karma.conf.js\"",
-    "test:firefox": "KARMA_BROWSER=Firefox karma start \"../../karma.conf.js\"",
+    "test:browser": "cross-env KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT_COMBINE=1 karma start \"../../karma.conf.js\"",
+    "test:chromium": "cross-env KARMA_BROWSER=Chromium karma start \"../../karma.conf.js\"",
+    "test:firefox": "cross-env KARMA_BROWSER=Firefox karma start \"../../karma.conf.js\"",
     "test:nodejs": "c8 --reporter=text mocha \"./source/index.test.*\"",
-    "test:webkit": "KARMA_BROWSER=WebKit karma start \"../../karma.conf.js\""
+    "test:webkit": "cross-env KARMA_BROWSER=WebKit karma start \"../../karma.conf.js\""
   },
   "publishConfig": {
     "access": "public"
