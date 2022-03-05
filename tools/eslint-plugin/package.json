@@ -1,0 +1,13 @@
+{
+  "name": "@marubase-tools/eslint-plugin",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "main": "./source/index.js",
+  "scripts": {
+    "clean:vendor": "del-cli \"./node_modules\"",
+    "lint": "eslint --ext .js \"./source/**/*\""
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

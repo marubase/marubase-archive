@@ -3,10 +3,10 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@marubase-tools/recommended",
     "plugin:prettier/recommended",
     "plugin:mocha/recommended"
   ],
   "parserOptions": { "ecmaVersion": "latest" },
-  "root": true,
-  "rules": {}
+  "root": true
 }

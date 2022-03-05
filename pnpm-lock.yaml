@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@marubase-tools/eslint-plugin': workspace:^0.0.0
       '@tsconfig/node16': ^1.0.2
       '@typescript-eslint/eslint-plugin': ^5.13.0
       '@typescript-eslint/parser': ^5.13.0
@@ -15,6 +16,7 @@ importers:
       prettier: ^2.5.1
       typescript: ^4.5.5
     devDependencies:
+      '@marubase-tools/eslint-plugin': link:tools/eslint-plugin
       '@tsconfig/node16': 1.0.2
       '@typescript-eslint/eslint-plugin': 5.13.0_1e08a597a4fb107867dcbe827a94038a
       '@typescript-eslint/parser': 5.13.0_eslint@8.10.0+typescript@4.5.5

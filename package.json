@@ -4,6 +4,7 @@
   "type": "commonjs",
   "private": true,
   "devDependencies": {
+    "@marubase-tools/eslint-plugin": "workspace:^0.0.0",
     "@tsconfig/node16": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
