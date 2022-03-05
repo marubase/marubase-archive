@@ -8,5 +8,12 @@
     "plugin:mocha/recommended"
   ],
   "parserOptions": { "ecmaVersion": "latest" },
-  "root": true
+  "plugins": ["tsdoc"],
+  "root": true,
+  "rules": {
+    "mocha/no-exports": "off",
+    "mocha/no-setup-in-describe": "off",
+    "mocha/no-synchronous-tests": ["error", { "allowed": ["async"] }],
+    "tsdoc/syntax": "error"
+  }
 }
