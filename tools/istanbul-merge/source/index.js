@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require("fs/promises");
 const globCb = require("glob");
 const helpers = require("yargs/helpers");
