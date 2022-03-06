@@ -3,4 +3,7 @@ import "./is-duplex.test.js";
 import "./is-readable.test.js";
 import "./is-writable.test.js";
 import "./iterator-stream.test.js";
+import "./to-buffer.test.js";
+import "./to-json.test.js";
 import "./to-readable.test.js";
+import "./to-text.test.js";
