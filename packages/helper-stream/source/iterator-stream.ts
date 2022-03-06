@@ -26,9 +26,9 @@ export class IteratorStream extends Readable {
       | AsyncIterator<unknown>
       | Iterable<unknown>
       | Iterator<unknown>,
-    options: ReadableOptions,
+    options?: ReadableOptions,
   ) {
-    super({ ...options, objectMode: true });
+    super(Object.assign({}, options, { objectMode: true }));
 
     if (Array.isArray(input)) {
       this._iterator = input.values();
