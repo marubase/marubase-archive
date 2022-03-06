@@ -1,5 +1,21 @@
 import { Readable, ReadableOptions } from "stream";
 
+function isAsyncIterable<T>(input: unknown): input is AsyncIterable<T> {
+  return (
+    typeof input === "object" &&
+    input !== null &&
+    Symbol.asyncIterator in (input as AsyncIterable<T>)
+  );
+}
+
+function isIterable<T>(input: unknown): input is Iterable<T> {
+  return (
+    typeof input === "object" &&
+    input !== null &&
+    Symbol.iterator in (input as Iterable<T>)
+  );
+}
+
 export class IteratorStream extends Readable {
   protected _iterator: AsyncIterator<unknown> | Iterator<unknown>;
 
@@ -31,20 +47,4 @@ export class IteratorStream extends Readable {
       (error) => this.destroy(error),
     );
   }
-}
-
-export function isAsyncIterable<T>(input: unknown): input is AsyncIterable<T> {
-  return (
-    typeof input === "object" &&
-    input !== null &&
-    Symbol.asyncIterator in (input as AsyncIterable<T>)
-  );
-}
-
-export function isIterable<T>(input: unknown): input is Iterable<T> {
-  return (
-    typeof input === "object" &&
-    input !== null &&
-    Symbol.iterator in (input as Iterable<T>)
-  );
 }
