@@ -5,7 +5,7 @@ describe("IteratorStream", function () {
   context("when input is array", function () {
     it("should return readable stream", async function () {
       const input = [0, 1, 2];
-      const readable = new IteratorStream(input, {});
+      const readable = new IteratorStream(input);
 
       const items: number[] = [];
       for await (const item of readable) items.push(item);
@@ -14,13 +14,13 @@ describe("IteratorStream", function () {
   });
   context("when input is async iterable", function () {
     it("should return readable stream", async function () {
-      const input = async function* (): AsyncIterableIterator<number> {
+      const iterate = async function* (): AsyncIterableIterator<number> {
         yield Promise.resolve(0);
         yield Promise.resolve(1);
         yield Promise.resolve(2);
       };
 
-      const readable = new IteratorStream(input(), {});
+      const readable = new IteratorStream(iterate());
 
       const items: number[] = [];
       for await (const item of readable) items.push(item);
@@ -29,13 +29,13 @@ describe("IteratorStream", function () {
   });
   context("when input is iterable", function () {
     it("should return readable stream", async function () {
-      const input = function* (): IterableIterator<number> {
+      const iterate = function* (): IterableIterator<number> {
         yield 0;
         yield 1;
         yield 2;
       };
 
-      const readable = new IteratorStream(input(), {});
+      const readable = new IteratorStream(iterate());
 
       const items: number[] = [];
       for await (const item of readable) items.push(item);
@@ -54,7 +54,7 @@ describe("IteratorStream", function () {
         },
       };
 
-      const readable = new IteratorStream(input, {});
+      const readable = new IteratorStream(input);
 
       const items: number[] = [];
       for await (const item of readable) items.push(item);
@@ -73,11 +73,31 @@ describe("IteratorStream", function () {
         },
       };
 
-      const readable = new IteratorStream(input, {});
+      const readable = new IteratorStream(input);
 
       const items: number[] = [];
       for await (const item of readable) items.push(item);
       expect(items).to.deep.equal([0, 1, 2]);
+    });
+  });
+  context("when input throw error", function () {
+    it("should throw error", async function () {
+      const input = {
+        cursor: 0,
+        items: [0, 1, 2],
+        async next(): Promise<IteratorResult<number>> {
+          return this.cursor < this.items.length
+            ? Promise.resolve({ done: false, value: this.items[this.cursor++] })
+            : Promise.reject(new Error("test error"));
+        },
+      };
+
+      const readable = new IteratorStream(input);
+
+      try {
+        const items: number[] = [];
+        for await (const item of readable) items.push(item);
+      } catch (error) {} /* eslint-disable-line no-empty */
     });
   });
 });
