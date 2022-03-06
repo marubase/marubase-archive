@@ -5,9 +5,10 @@ export class BufferStream extends Readable {
 
   public constructor(
     input: ArrayBuffer | NodeJS.TypedArray | string,
-    options: ReadableOptions,
+    options?: ReadableOptions,
   ) {
-    super({ ...options });
+    super(Object.assign({}, options));
+
     if (ArrayBuffer.isView(input)) {
       const { buffer, byteLength, byteOffset } = input;
       this._buffer = Buffer.from(buffer, byteOffset, byteLength);
