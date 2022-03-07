@@ -1,18 +1,18 @@
 import { expect } from "chai";
 import { Readable } from "stream";
-import { isReadable } from "./is-readable.js";
+import { isReadableStream } from "./is-readable-stream.js";
 
-describe("isReadable(input)", function () {
+describe("isReadableStream(input)", function () {
   context("when input is readable stream", function () {
     it("should return true", async function () {
       const input = new Readable();
-      expect(isReadable(input)).to.be.true;
+      expect(isReadableStream(input)).to.be.true;
     });
   });
   context("when input is not readable stream", function () {
     it("should return false", async function () {
       const input = null;
-      expect(isReadable(input)).to.be.false;
+      expect(isReadableStream(input)).to.be.false;
     });
   });
 });
