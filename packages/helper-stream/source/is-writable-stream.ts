@@ -1,6 +1,6 @@
 import { Writable } from "stream";
 
-export function isWritable(input: unknown): input is Writable {
+export function isWritableStream(input: unknown): input is Writable {
   return (
     typeof input === "object" &&
     input !== null &&
