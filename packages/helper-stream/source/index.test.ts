@@ -1,7 +1,7 @@
 import "./buffer-stream.test.js";
-import "./is-duplex.test.js";
-import "./is-readable.test.js";
-import "./is-writable.test.js";
+import "./is-duplex-stream.test.js";
+import "./is-readable-stream.test.js";
+import "./is-writable-stream.test.js";
 import "./iterator-stream.test.js";
 import "./to-buffer.test.js";
 import "./to-json.test.js";
