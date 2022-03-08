@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 
-export function isReadableStream(input: unknown): input is Readable {
+export function isReadable(input: unknown): input is Readable {
   return (
     typeof input === "object" &&
     input !== null &&
