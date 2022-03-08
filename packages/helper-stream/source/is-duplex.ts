@@ -1,6 +1,6 @@
 import { Duplex } from "stream";
 
-export function isDuplexStream(input: unknown): input is Duplex {
+export function isDuplex(input: unknown): input is Duplex {
   return (
     typeof input === "object" &&
     input !== null &&
