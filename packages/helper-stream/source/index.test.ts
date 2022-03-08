@@ -5,3 +5,5 @@ import "./to-buffer-readable.test.js";
 import "./to-buffer.test.js";
 import "./to-collection-readable.test.js";
 import "./to-collection.test.js";
+import "./to-json-data.test.js";
+import "./to-text-data.test.js";
