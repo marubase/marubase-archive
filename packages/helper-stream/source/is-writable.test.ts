@@ -1,18 +1,18 @@
 import { expect } from "chai";
 import { Writable } from "stream";
-import { isWritableStream } from "./is-writable-stream.js";
+import { isWritable } from "./is-writable.js";
 
-describe("isWritableStream(input)", function () {
+describe("isWritable(input)", function () {
   context("when input is writable stream", function () {
     it("should return true", async function () {
       const input = new Writable();
-      expect(isWritableStream(input)).to.be.true;
+      expect(isWritable(input)).to.be.true;
     });
   });
   context("when input is not writable stream", function () {
     it("should return false", async function () {
       const input = null;
-      expect(isWritableStream(input)).to.be.false;
+      expect(isWritable(input)).to.be.false;
     });
   });
 });
