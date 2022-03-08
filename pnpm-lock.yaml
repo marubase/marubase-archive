@@ -90,6 +90,12 @@ importers:
       webpack: 5.70.0_webpack-cli@4.9.2
       webpack-cli: 4.9.2_webpack@5.70.0
 
+  packages/service-router:
+    specifiers:
+      '@marubase/helper-stream': workspace:^0.0.0
+    dependencies:
+      '@marubase/helper-stream': link:../helper-stream
+
   tools/istanbul-merge:
     specifiers:
       glob: ^7.2.0
