@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { toBufferReadable } from "./to-buffer-readable.js";
 import { toBuffer } from "./to-buffer.js";
 
-describe("toBuffer(stream)", function () {
+describe("toBuffer(readable)", function () {
   it("should return buffer", async function () {
     const readable = toBufferReadable(Buffer.from("ABC", "utf8"));
 
