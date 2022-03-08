@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { toCollectionReadable } from "./to-collection-readable.js";
 import { toCollection } from "./to-collection.js";
 
-describe("toCollection(input)", function () {
+describe("toCollection(readable)", function () {
   it("should return collection", async function () {
     const readable = toCollectionReadable([0, 1, 2]);
 
