@@ -1,11 +1,12 @@
 import { expect } from "chai";
+import { toBufferReadable } from "./to-buffer-readable.js";
 import { toBuffer } from "./to-buffer.js";
-import { toReadable } from "./to-readable.js";
 
 describe("toBuffer(stream)", function () {
   it("should return buffer", async function () {
-    const readable = toReadable("hello, world");
+    const readable = toBufferReadable(Buffer.from("ABC", "utf8"));
+
     const buffer = await toBuffer(readable);
-    expect(buffer).to.deep.equal(Buffer.from("hello, world"));
+    expect(buffer).to.deep.equal(Buffer.from([65, 66, 67]));
   });
 });
