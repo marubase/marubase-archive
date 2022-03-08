@@ -5,3 +5,5 @@ export * from "./to-buffer-readable.js";
 export * from "./to-buffer.js";
 export * from "./to-collection-readable.js";
 export * from "./to-collection.js";
+export * from "./to-json-data.js";
+export * from "./to-text-data.js";
