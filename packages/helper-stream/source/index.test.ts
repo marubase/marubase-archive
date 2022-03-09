@@ -12,4 +12,6 @@ import "./to-multipart-readable.test.js";
 import "./to-multipart.test.js";
 import "./to-request-readable.test.js";
 import "./to-request.test.js";
+import "./to-response-readable.test.js";
+import "./to-response.test.js";
 import "./to-text-data.test.js";
