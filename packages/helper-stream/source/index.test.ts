@@ -8,4 +8,5 @@ import "./to-collection.test.js";
 import "./to-json-data.test.js";
 import "./to-message-readable.test.js";
 import "./to-message.test.js";
+import "./to-multipart-readable.test.js";
 import "./to-text-data.test.js";
