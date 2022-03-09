@@ -32,10 +32,10 @@ class MessageReadable extends Readable {
 }
 
 export function toMessageReadable(
-  message: Message,
+  input: Message,
   options?: ReadableOptions,
 ): Readable {
-  return new MessageReadable(message, options);
+  return new MessageReadable(input, options);
 }
 
 export type Message = {
