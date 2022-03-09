@@ -38,4 +38,15 @@ describe("toBufferReadable(input)", function () {
       expect(buffer).to.deep.equal(Buffer.from([65, 66, 67]));
     });
   });
+  context("when input is too large", function () {
+    it("should return readable stream", async function () {
+      const input = Buffer.alloc(16384 * 4, 65);
+
+      const readable = toBufferReadable(input);
+      expect(isReadable(readable)).to.be.true;
+
+      const buffer = await toBuffer(readable);
+      expect(buffer).to.deep.equal(Buffer.alloc(16384 * 4, 65));
+    });
+  });
 });
