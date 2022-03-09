@@ -12,4 +12,6 @@ export * from "./to-multipart-readable.js";
 export * from "./to-multipart.js";
 export * from "./to-request-readable.js";
 export * from "./to-request.js";
+export * from "./to-response-readable.js";
+export * from "./to-response.js";
 export * from "./to-text-data.js";
