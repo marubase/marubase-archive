@@ -22,8 +22,8 @@ export async function toMessage(readable: Readable): Promise<Message> {
     const separatorIndex = buffer.indexOf(separator);
     if (separatorIndex < 0) continue;
 
-    const rawHeaders = buffer.subarray(0, separatorIndex).toString("utf8");
-    for (const rawHeader of rawHeaders.split("\r\n")) {
+    const headersBlock = buffer.subarray(0, separatorIndex).toString("utf8");
+    for (const rawHeader of headersBlock.split("\r\n")) {
       const [key, value] = rawHeader.split(":");
       headers.set(key.trim(), value.trim());
     }
