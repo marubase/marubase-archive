@@ -6,4 +6,6 @@ export * from "./to-buffer.js";
 export * from "./to-collection-readable.js";
 export * from "./to-collection.js";
 export * from "./to-json-data.js";
+export * from "./to-message-readable.js";
+export * from "./to-message.js";
 export * from "./to-text-data.js";
