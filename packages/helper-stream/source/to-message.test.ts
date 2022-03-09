@@ -5,6 +5,7 @@ import { toBufferReadable } from "./to-buffer-readable.js";
 import { toJsonData } from "./to-json-data.js";
 import { toMessageReadable } from "./to-message-readable.js";
 import { toMessage } from "./to-message.js";
+import { toTextData } from "./to-text-data.js";
 
 describe("toMessage(readable)", function () {
   context("when readable is a valid message stream", function () {
@@ -49,14 +50,15 @@ describe("toMessage(readable)", function () {
         ["Content-Length", "14"],
       ]);
       const body = new Readable({
-        read(): void {
+        read() {
           this.destroy(new Error("test error"));
         },
       });
 
       try {
         const readable = toMessageReadable({ body, headers });
-        await toMessage(readable);
+        const { body: content } = await toMessage(readable);
+        await toTextData(content);
       } catch (error) {} /* eslint-disable-line no-empty */
     });
   });
