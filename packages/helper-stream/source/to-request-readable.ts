@@ -26,8 +26,8 @@ class RequestReadable extends Readable {
       this._reader = body[Symbol.asyncIterator]();
 
       const { method, path, protocol } = this._request;
-      const rawRequest = `${method.toUpperCase()} ${path} ${protocol.toUpperCase()}\r\n`;
-      this.push(rawRequest);
+      const requestLine = `${method.toUpperCase()} ${path} ${protocol.toUpperCase()}\r\n`;
+      this.push(requestLine);
 
       const { headers } = this._request;
       for (const [key, value] of [...headers.entries()].sort()) {
