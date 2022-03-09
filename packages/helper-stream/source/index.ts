@@ -9,4 +9,5 @@ export * from "./to-json-data.js";
 export * from "./to-message-readable.js";
 export * from "./to-message.js";
 export * from "./to-multipart-readable.js";
+export * from "./to-multipart.js";
 export * from "./to-text-data.js";
