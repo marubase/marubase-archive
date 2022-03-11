@@ -93,9 +93,6 @@ importers:
   packages/helper-stream:
     specifiers: {}
 
-  packages/service-manager:
-    specifiers: {}
-
   tools/eslint-plugin:
     specifiers: {}
 
