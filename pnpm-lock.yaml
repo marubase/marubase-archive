@@ -93,6 +93,12 @@ importers:
   packages/helper-stream:
     specifiers: {}
 
+  packages/service-framework:
+    specifiers:
+      '@marubase/helper-stream': workspace:^0.0.0
+    dependencies:
+      '@marubase/helper-stream': link:../helper-stream
+
   tools/eslint-plugin:
     specifiers: {}
 
