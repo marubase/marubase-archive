@@ -2,6 +2,7 @@ module.exports = {
   configs: {
     recommended: {
       rules: {
+        "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/explicit-member-accessibility": "error",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/explicit-function-return-type": [
