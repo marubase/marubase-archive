@@ -4,6 +4,7 @@ module.exports = {
       rules: {
         "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/explicit-member-accessibility": "error",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/explicit-function-return-type": [
           "error",
