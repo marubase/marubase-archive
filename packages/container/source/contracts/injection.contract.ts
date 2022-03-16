@@ -1,8 +1,7 @@
-import { Callable, RegistryBinding, RegistryTag } from "./registry.contract.js";
+import { RegistryBinding, RegistryTag } from "./registry.contract.js";
 
 export type Injection =
   | InjectionBinding
-  | InjectionCallable
   | InjectionClass
   | InjectionConstant
   | InjectionFunction
@@ -12,11 +11,6 @@ export type Injection =
 export type InjectionBinding = {
   binding: RegistryBinding;
   type: "binding";
-};
-
-export type InjectionCallable = {
-  callable: Callable;
-  type: "callable";
 };
 
 export type InjectionClass = {
