@@ -9,12 +9,12 @@ export const MethodConstructor = Symbol("MethodConstructor");
 
 export const RegistryContract = Symbol("RegistryContract");
 
-export const BindingAlias: Omit<RegistryBinding, "target"> = {
+export const BindingAlias: Partial<RegistryBinding> = {
   environment: EnvDefault,
   method: MethodAlias,
 };
 
-export const BindingDefault: Omit<RegistryBinding, "target"> = {
+export const BindingDefault: Partial<RegistryBinding> = {
   environment: EnvDefault,
   method: MethodConstructor,
 };
@@ -99,9 +99,7 @@ export type BindTo = {
   toTag(tag: RegistryTag): ResolverInterface;
 };
 
-export type Bindable =
-  | Omit<RegistryBinding, "environment" | "method">
-  | RegistryTarget;
+export type Bindable = Partial<RegistryBinding> | RegistryTarget;
 
 export type RegistryBinding = {
   environment: RegistryEnv;
@@ -125,6 +123,4 @@ export type RegistryMethod = string | symbol;
 
 export type RegistryMethodMap = Map<RegistryMethod, ResolverInterface>;
 
-export type Resolvable =
-  | Omit<RegistryBinding, "environment" | "method">
-  | RegistryTarget;
+export type Resolvable = Partial<RegistryBinding> | RegistryTarget;
