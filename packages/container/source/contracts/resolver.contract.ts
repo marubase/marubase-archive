@@ -84,6 +84,8 @@ export type ResolverFactory = {
   ): ResolverInterface;
 };
 
+export type ResolverFunction<Instance> = (...args: unknown[]) => Instance;
+
 export type ResolverInstance<Instance> = {
   [method: string | symbol]: (...args: unknown[]) => Instance;
 };
