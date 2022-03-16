@@ -6,11 +6,10 @@ import {
 import {
   Bindable,
   BindTo,
-  Callable,
   RegistryInterface,
   RegistryTag,
+  Resolvable,
 } from "./registry.contract.js";
-import { Resolvable } from "./resolver.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
 
 export const ContainerContract = Symbol("ContainerContract");
@@ -35,8 +34,6 @@ export interface ContainerInterface {
   installed(name: ProviderName): boolean;
 
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
-
-  resolveCallable<Result>(callable: Callable, ...args: unknown[]): Result;
 
   resolveClass<Result>(target: Function, ...args: unknown[]): Result;
 
