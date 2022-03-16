@@ -78,7 +78,7 @@ export interface RegistryInterface {
     scope: ScopeInterface,
     tag: RegistryTag,
     ...args: unknown[]
-  ): Result[];
+  ): Result;
 
   setResolverByBinding(
     binding: RegistryBinding,
