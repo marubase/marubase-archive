@@ -9,6 +9,11 @@ export const MethodConstructor = Symbol("MethodConstructor");
 
 export const RegistryContract = Symbol("RegistryContract");
 
+export const BindingAlias: Omit<RegistryBinding, "target"> = {
+  environment: EnvDefault,
+  method: MethodAlias,
+};
+
 export const BindingDefault: Omit<RegistryBinding, "target"> = {
   environment: EnvDefault,
   method: MethodConstructor,
@@ -23,12 +28,9 @@ export interface RegistryInterface {
 
   bind(bindable: Bindable): BindTo;
 
-  bound(binding: Bindable): boolean;
+  bound(bindable: Bindable): boolean;
 
-  clearResolverByBinding(
-    binding: RegistryBinding,
-    resolver: ResolverInterface,
-  ): this;
+  clearResolverByBinding(binding: RegistryBinding): this;
 
   clearResolverByTags(
     tags: Set<RegistryTag>,
@@ -77,7 +79,7 @@ export interface RegistryInterface {
 
   setResolverByTags(tags: Set<RegistryTag>, resolver: ResolverInterface): this;
 
-  unbind(binding: Bindable): this;
+  unbind(bindable: Bindable): this;
 }
 
 export type BindTo = {
