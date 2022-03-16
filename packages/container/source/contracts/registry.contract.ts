@@ -13,6 +13,11 @@ export const MethodConstructor = Symbol("MethodConstructor");
 
 export const RegistryContract = Symbol("RegistryContract");
 
+export const BindingDefault: Omit<RegistryBinding, "target"> = {
+  environment: EnvDefault,
+  method: MethodConstructor,
+};
+
 export interface RegistryInterface {
   readonly bindings: RegistryEnvMap;
 
