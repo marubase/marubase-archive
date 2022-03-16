@@ -10,7 +10,7 @@ import {
   RegistryTag,
   Resolvable,
 } from "./registry.contract.js";
-import { ScopeInterface } from "./scope.contract.js";
+import { ScopeInterface, ScopeType } from "./scope.contract.js";
 
 export const ContainerContract = Symbol("ContainerContract");
 
@@ -27,7 +27,9 @@ export interface ContainerInterface {
 
   boot(): Promise<void>;
 
-  bound(binding: Bindable): boolean;
+  bound(bindable: Bindable): boolean;
+
+  fork(type: ScopeType): this;
 
   install(name: ProviderName, provider: ProviderInterface): this;
 
@@ -49,7 +51,7 @@ export interface ContainerInterface {
 
   shutdown(): Promise<void>;
 
-  unbind(binding: Bindable): this;
+  unbind(bindable: Bindable): this;
 
-  uninstall(): Promise<void>;
+  uninstall(name: ProviderName): this;
 }
