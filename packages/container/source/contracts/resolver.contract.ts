@@ -1,10 +1,8 @@
 import { Injection } from "./injection.contract.js";
 import {
-  Bindable,
   RegistryBinding,
   RegistryInterface,
   RegistryTag,
-  RegistryTarget,
 } from "./registry.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
 
@@ -29,7 +27,7 @@ export interface ResolverInterface {
 
   resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result;
 
-  setBinding(binding: Bindable): this;
+  setBinding(binding: RegistryBinding): this;
 
   setInjections(...injections: Injection[]): this;
 
@@ -38,20 +36,11 @@ export interface ResolverInterface {
   setTags(...tags: RegistryTag[]): this;
 }
 
-export type Resolvable =
-  | Omit<RegistryBinding, "environment" | "method">
-  | RegistryTarget;
-
 export type ResolverConstructor<Instance> = new (
   ...args: unknown[]
 ) => Instance;
 
 export type ResolverFactory = {
-  createAliasResolver(
-    registry: RegistryInterface,
-    alias: Resolvable,
-  ): ResolverInterface;
-
   createBindingResolver(
     registry: RegistryInterface,
     binding: RegistryBinding,
