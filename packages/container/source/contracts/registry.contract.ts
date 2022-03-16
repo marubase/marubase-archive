@@ -1,8 +1,4 @@
-import {
-  Resolvable,
-  ResolverFactory,
-  ResolverInterface,
-} from "./resolver.contract.js";
+import { ResolverFactory, ResolverInterface } from "./resolver.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
 
 export const EnvDefault = Symbol("EnvDefault");
@@ -49,12 +45,6 @@ export interface RegistryInterface {
     ...args: unknown[]
   ): Result;
 
-  resolveCallable<Result>(
-    scope: ScopeInterface,
-    callable: Callable,
-    ...args: unknown[]
-  ): Result;
-
   resolveClass<Result>(
     scope: ScopeInterface,
     target: Function,
@@ -95,8 +85,6 @@ export type BindTo = {
 
   toAlias(alias: Resolvable): ResolverInterface;
 
-  toCallable(callable: Callable): ResolverInterface;
-
   toConstant(constant: unknown): ResolverInterface;
 
   toFunction(target: Function): ResolverInterface;
@@ -112,8 +100,6 @@ export type BindTo = {
 export type Bindable =
   | Omit<RegistryBinding, "environment" | "method">
   | RegistryTarget;
-
-export type Callable = [Function | Object, string | symbol] | Function;
 
 export type RegistryBinding = {
   environment: RegistryEnv;
@@ -136,3 +122,7 @@ export type RegistryTargetMap = Map<RegistryTarget, RegistryMethodMap>;
 export type RegistryMethod = string | symbol;
 
 export type RegistryMethodMap = Map<RegistryMethod, ResolverInterface>;
+
+export type Resolvable =
+  | Omit<RegistryBinding, "environment" | "method">
+  | RegistryTarget;
