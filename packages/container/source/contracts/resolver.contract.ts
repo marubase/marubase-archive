@@ -31,14 +31,12 @@ export interface ResolverInterface {
 
   setBinding(binding: Bindable): this;
 
-  setInjections(...injections: Injectable[]): this;
+  setInjections(...injections: Injection[]): this;
 
   setScope(scope: ResolverScope): this;
 
   setTags(...tags: RegistryTag[]): this;
 }
-
-export type Injectable = Injection | Resolvable;
 
 export type Resolvable =
   | Omit<RegistryBinding, "environment" | "method">
