@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { instance, mock, reset } from "ts-mockito";
 import { ResolverInterface } from "./contracts/resolver.contract.js";
 import { Registry } from "./registry.js";
+import { ConstantResolver } from "./resolvers/constant-resolver.js";
 import { Scope } from "./scope.js";
 
 describe("Registry", function () {
@@ -61,6 +62,18 @@ describe("Registry", function () {
     context("when there tags", function () {
       it("should return self", async function () {
         registry.setResolverByTags(new Set(["test"]), resolver);
+
+        const self = registry.clearResolverByTags(new Set(["test"]), resolver);
+        expect(self).to.equal(registry);
+      });
+    });
+    context("when there tags #2", function () {
+      it("should return self", async function () {
+        registry.setResolverByTags(new Set(["test"]), resolver);
+        registry.setResolverByTags(
+          new Set(["test"]),
+          new ConstantResolver(registry, true),
+        );
 
         const self = registry.clearResolverByTags(new Set(["test"]), resolver);
         expect(self).to.equal(registry);
