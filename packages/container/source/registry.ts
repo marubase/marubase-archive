@@ -82,7 +82,8 @@ export class Registry implements RegistryInterface {
     for (const tag of tagSet) {
       const resolverSet = this._tagMap.get(tag);
       if (typeof resolverSet === "undefined") continue;
-      if (resolverSet.has(resolver)) resolverSet.delete(resolver);
+
+      resolverSet.delete(resolver);
       if (resolverSet.size < 1) this._tagMap.delete(tag);
     }
     return this;
