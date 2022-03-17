@@ -19,7 +19,7 @@ export class FunctionResolver
 
   public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
     const target = this._target as ResolvableFunction<Result>;
-    const targetArgs = this._resolveDependencies(scope).concat(...args);
+    const targetArgs = this.resolveDependencies(scope).concat(...args);
     return target(...targetArgs);
   }
 }
