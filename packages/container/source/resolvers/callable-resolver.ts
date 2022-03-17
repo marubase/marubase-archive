@@ -51,7 +51,7 @@ export class CallableResolver
       throw new ContainerError(`${context} ${problem} ${solution}`);
     }
 
-    const methodArgs = this._resolveDependencies(scope).concat(...args);
+    const methodArgs = this.resolveDependencies(scope).concat(...args);
     return instance[this._method](...methodArgs);
   }
 }
