@@ -72,6 +72,15 @@ export class BaseResolver implements ResolverInterface {
     throw new ContainerError(`${context} ${problem} ${solution}`);
   }
 
+  public resolveDependencies(
+    scope: ScopeInterface,
+    ...args: unknown[]
+  ): unknown[] {
+    const toInstance = (dependency: ResolvableTarget): unknown =>
+      this._registry.resolve(dependency, scope, ...args);
+    return this._dependencies.map(toInstance);
+  }
+
   public setBinding(binding: ResolvableTarget): this {
     if (typeof this._binding !== "undefined") this.clearBinding();
     this._binding = binding;
@@ -94,14 +103,5 @@ export class BaseResolver implements ResolverInterface {
     this._tagSet = new Set(tags);
     this._registry.setResolverByTags(this._tagSet, this);
     return this;
-  }
-
-  protected _resolveDependencies(
-    scope: ScopeInterface,
-    ...args: unknown[]
-  ): unknown[] {
-    const toInstance = (dependency: ResolvableTarget): unknown =>
-      this._registry.resolve(dependency, scope, ...args);
-    return this._dependencies.map(toInstance);
   }
 }
