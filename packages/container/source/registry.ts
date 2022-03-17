@@ -91,7 +91,7 @@ export class Registry implements RegistryInterface {
   public getResolverByBinding(
     binding: ResolvableTarget,
   ): ResolverInterface | undefined {
-    return this._bindingMap.get(binding);
+    return this._bindingMap.get(binding) || undefined;
   }
 
   public getResolverByTag(tag: ResolvableTag): ResolverInterface[] {
