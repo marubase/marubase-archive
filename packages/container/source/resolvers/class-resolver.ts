@@ -16,7 +16,7 @@ export class ClassResolver extends BaseResolver implements ResolverInterface {
 
   public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
     const target = this._target as ResolvableConstructor<Result>;
-    const targetArgs = this._resolveDependencies(scope).concat(...args);
+    const targetArgs = this.resolveDependencies(scope).concat(...args);
     return new target(...targetArgs);
   }
 }
