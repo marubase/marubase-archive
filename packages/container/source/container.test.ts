@@ -191,6 +191,7 @@ describe("Container", function () {
           shutdown: async (): Promise<void> => undefined,
         };
         container.install("test", provider);
+        await container.boot();
 
         await container.shutdown();
         expect(container.booted).to.be.false;
@@ -200,6 +201,7 @@ describe("Container", function () {
       it("should shutdown container", async function () {
         const provider: Provider = {};
         container.install("test", provider);
+        await container.boot();
 
         await container.shutdown();
         expect(container.booted).to.be.false;
