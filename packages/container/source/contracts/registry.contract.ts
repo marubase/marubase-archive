@@ -63,6 +63,8 @@ export type RegistryBinding = {
 
   toFunction: (target: Function) => ResolverInterface;
 
+  toSelf: () => ResolverInterface;
+
   toTag: (tag: ResolvableTag) => ResolverInterface;
 };
 
