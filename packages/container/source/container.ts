@@ -1,4 +1,5 @@
 import {
+  ContainerContract,
   ContainerInterface,
   Provider,
   ProviderName,
@@ -10,6 +11,7 @@ import {
   ResolvableTag,
   ResolvableTarget,
 } from "./contracts/registry.contract.js";
+import { ResolverInterface } from "./contracts/resolver.contract.js";
 import { ScopeInterface } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
@@ -27,6 +29,10 @@ export class Container implements ContainerInterface {
   public constructor(registry?: RegistryInterface, scope?: ScopeInterface) {
     this._registry = registry || new Registry();
     this._scope = scope || new Scope();
+
+    this.bind(ContainerContract).toConstant(this);
+    this.bind(Container).toAlias(ContainerContract);
+    this.bind("Container").toAlias(ContainerContract);
   }
 
   public get booted(): boolean {
@@ -66,6 +72,10 @@ export class Container implements ContainerInterface {
   public fork(): this {
     const Static = this.constructor as typeof Container;
     return new Static(this._registry, this._scope.fork("container")) as this;
+  }
+
+  public getResolver(binding: ResolvableTarget): ResolverInterface | undefined {
+    return this._registry.getResolverByBinding(binding);
   }
 
   public install(name: ProviderName, provider: Provider): this {
