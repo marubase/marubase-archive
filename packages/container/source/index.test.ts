@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import "./cache.test.js";
 import "./container.test.js";
 import "./registry-binding.test.js";
