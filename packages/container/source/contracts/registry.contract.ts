@@ -33,6 +33,12 @@ export interface RegistryInterface {
     ...args: unknown[]
   ): Result;
 
+  resolveTag<Result>(
+    tag: ResolvableTag,
+    scope: ScopeInterface,
+    ...args: unknown[]
+  ): Result[];
+
   setResolverByBinding(
     binding: ResolvableTarget,
     resolver: ResolverInterface,
