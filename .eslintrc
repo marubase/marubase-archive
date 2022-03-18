@@ -11,6 +11,7 @@
   "plugins": ["tsdoc"],
   "root": true,
   "rules": {
+    "mocha/max-top-level-suites": "off",
     "mocha/no-exports": "off",
     "mocha/no-setup-in-describe": "off",
     "mocha/no-synchronous-tests": ["error", { "allowed": ["async"] }],
