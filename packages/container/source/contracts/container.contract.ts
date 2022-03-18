@@ -2,6 +2,7 @@ import {
   RegistryBinding,
   RegistryInterface,
   Resolvable,
+  ResolvableTag,
   ResolvableTarget,
 } from "./registry.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
@@ -30,6 +31,8 @@ export interface ContainerInterface {
   installed(name: ProviderName): boolean;
 
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
+
+  resolveTag<Result>(tag: ResolvableTag, ...args: unknown[]): Result[];
 
   shutdown(): Promise<void>;
 
