@@ -7,7 +7,10 @@ import {
 } from "../contracts/registry.contract.js";
 import { ResolverInterface } from "../contracts/resolver.contract.js";
 import { ScopeInterface } from "../contracts/scope.contract.js";
-import { ContainerError } from "../errors/container.error.js";
+import { getDependencies } from "../functions/get-dependencies.js";
+import { getScope } from "../functions/get-scope.js";
+import { getTags } from "../functions/get-tags.js";
+import { isInjectable } from "../functions/is-injectable.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class CallableResolver
@@ -23,35 +26,29 @@ export class CallableResolver
     callable: ResolvableCallable,
   ) {
     super(registry);
-    this._target = callable[0];
-    this._method = callable[1];
+
+    const [target, method] = callable;
+    this._target = target;
+    this._method = method;
   }
 
   public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
-    const instance = this._registry.resolve<ResolvableInstance<Result>>(
-      this._target,
-      scope,
-    );
-    if (!(this._method in instance)) {
-      const targetText =
-        typeof this._target !== "string"
-          ? typeof this._target !== "function"
-            ? this._target.toString()
-            : this._target.name
-          : this._target;
-      const methodText =
-        typeof this._method !== "string"
-          ? this._method.toString()
-          : this._method;
-      const callableText = `${targetText}#${methodText}`;
+    const result = this._registry.resolve(this._target, scope);
+    const target = result as ResolvableInstance<Result>;
+    const method = this._method;
 
-      const context = `Resolving callable resolver: '${callableText}'.`;
-      const problem = `Callable method not found.`;
-      const solution = `Please invoke existing method.`;
-      throw new ContainerError(`${context} ${problem} ${solution}`);
+    if (isInjectable(target, method)) {
+      const resolverDependencies = getDependencies(target, method);
+      this.setDependencies(...resolverDependencies);
+
+      const resolverScope = getScope(target);
+      this.setScope(resolverScope);
+
+      const resolverTags = getTags(target);
+      this.setTags(...resolverTags);
     }
 
     const methodArgs = this.resolveDependencies(scope).concat(...args);
-    return instance[this._method](...methodArgs);
+    return target[method](...methodArgs);
   }
 }
