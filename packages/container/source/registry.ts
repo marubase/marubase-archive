@@ -119,6 +119,14 @@ export class Registry implements RegistryInterface {
           .resolve(scope, ...args);
   }
 
+  public resolveTag<Result>(
+    tag: ResolvableTag,
+    scope: ScopeInterface,
+    ...args: unknown[]
+  ): Result[] {
+    return this._factory.createTagResolver(this, tag).resolve(scope, ...args);
+  }
+
   public setResolverByBinding(
     binding: ResolvableTarget,
     resolver: ResolverInterface,
