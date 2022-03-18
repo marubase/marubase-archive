@@ -5,6 +5,7 @@ import {
   ResolvableTag,
   ResolvableTarget,
 } from "./registry.contract.js";
+import { ResolverInterface } from "./resolver.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
 
 export const ContainerContract = Symbol("ContainerContract");
@@ -25,6 +26,8 @@ export interface ContainerInterface {
   bound(binding: ResolvableTarget): boolean;
 
   fork(): this;
+
+  getResolver(binding: ResolvableTarget): ResolverInterface | undefined;
 
   install(name: ProviderName, provider: Provider): this;
 
