@@ -7,6 +7,7 @@ import {
   RegistryBinding,
   RegistryInterface,
   Resolvable,
+  ResolvableTag,
   ResolvableTarget,
 } from "./contracts/registry.contract.js";
 import { ScopeInterface } from "./contracts/scope.contract.js";
@@ -90,6 +91,11 @@ export class Container implements ContainerInterface {
   public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
     const scope = this._scope.fork("request");
     return this._registry.resolve(resolvable, scope, ...args);
+  }
+
+  public resolveTag<Result>(tag: ResolvableTag, ...args: unknown[]): Result[] {
+    const scope = this._scope.fork("request");
+    return this._registry.resolveTag(tag, scope, ...args);
   }
 
   public async shutdown(): Promise<void> {
