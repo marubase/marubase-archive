@@ -10,6 +10,7 @@ import {
   ResolverInterface,
 } from "./contracts/resolver.contract.js";
 import { ScopeInterface } from "./contracts/scope.contract.js";
+import { ContainerError } from "./errors/container.error.js";
 import { BindingResolver } from "./resolvers/binding-resolver.js";
 import { CallableResolver } from "./resolvers/callable-resolver.js";
 import { ClassResolver } from "./resolvers/class-resolver.js";
@@ -60,6 +61,19 @@ export class Registry implements RegistryInterface {
 
       toFunction: (target) =>
         this._factory.createFunctionResolver(this, target).setBinding(binding),
+
+      toSelf: () => {
+        if (typeof binding !== "function") {
+          const bindingText =
+            typeof binding !== "string" ? binding.toString() : binding;
+
+          const context = `Container binding to '${bindingText}'.`;
+          const problem = `Binding target is not a class.`;
+          const solution = `Please use a class as a binding target.`;
+          throw new ContainerError(`${context} ${problem} ${solution}`);
+        }
+        return this.bind(binding).to(binding);
+      },
 
       toTag: (tag) =>
         this._factory.createTagResolver(this, tag).setBinding(binding),
