@@ -1,22 +1,20 @@
 import {
   RegistryBindTo,
-  RegistryInterface,
+  RegistryContract,
   RegistryKey,
-  Resolvable,
+  RegistryResolvable,
 } from "./registry.contract.js";
-import { ResolverInterface } from "./resolver.contract.js";
-import { ScopeInterface } from "./scope.contract.js";
+import { ResolverContract } from "./resolver.contract.js";
+import { ScopeContract } from "./scope.contract.js";
 
-export const ContainerContract = Symbol("ContainerContract");
+export interface ContainerContract {
+  readonly registry: RegistryContract;
 
-export interface CotainerInterface {
-  readonly registry: RegistryInterface;
-
-  readonly scope: ScopeInterface;
+  readonly scope: ScopeContract;
 
   bind(key: RegistryKey): RegistryBindTo;
 
-  getResolverByKey(key: RegistryKey): ResolverInterface | undefined;
+  getResolverByKey(key: RegistryKey): ResolverContract | undefined;
 
-  resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
+  resolve<Result>(resolvable: RegistryResolvable, ...args: unknown[]): Result;
 }
