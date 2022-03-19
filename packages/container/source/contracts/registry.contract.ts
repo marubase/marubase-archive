@@ -1,38 +1,36 @@
-import { ResolverFactory, ResolverInterface } from "./resolver.contract.js";
-import { ScopeInterface } from "./scope.contract.js";
+import { ResolverContract, ResolverFactory } from "./resolver.contract.js";
+import { ScopeContract } from "./scope.contract.js";
 
-export const RegistryContract = Symbol("RegistryContract");
-
-export interface RegistryInterface {
+export interface RegistryContract {
   readonly factory: ResolverFactory;
 
-  readonly keyMap: Map<RegistryKey, ResolverInterface>;
+  readonly keyMap: Map<RegistryKey, ResolverContract>;
 
   bind(key: RegistryKey): RegistryBindTo;
 
   clearResolverByKey(key: RegistryKey): this;
 
-  getResolverByKey(key: RegistryKey): ResolverInterface | undefined;
+  getResolverByKey(key: RegistryKey): ResolverContract | undefined;
 
   resolve<Result>(
-    resolvable: Resolvable,
-    scope: ScopeInterface,
+    resolvable: RegistryResolvable,
+    scope: ScopeContract,
     ...args: unknown[]
   ): Result;
 
-  setResolverByKey(key: RegistryKey, resolver: ResolverInterface): this;
+  setResolverByKey(key: RegistryKey, resolver: ResolverContract): this;
 }
 
 export type RegistryBindTo = {
-  to: (constructor: Function) => ResolverInterface;
+  to(constructor: Function): ResolverContract;
 
-  toAlias: (alias: RegistryKey) => ResolverInterface;
+  toAlias(alias: RegistryKey): ResolverContract;
 
-  toConstant: (constant: unknown) => ResolverInterface;
+  toConstant(constant: unknown): ResolverContract;
 
-  toSelf: () => ResolverInterface;
+  toSelf(): ResolverContract;
 };
 
 export type RegistryKey = Function | string | symbol;
 
-export type Resolvable = RegistryKey;
+export type RegistryResolvable = RegistryKey;
