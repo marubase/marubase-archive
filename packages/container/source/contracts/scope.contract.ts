@@ -1,13 +1,11 @@
-import { CacheInterface } from "./cache.contract.js";
+import { CacheContract } from "./cache.contract.js";
 
-export const ScopeContract = Symbol("ScopeContract");
+export interface ScopeContract {
+  readonly container: CacheContract;
 
-export interface ScopeInterface {
-  readonly container: CacheInterface;
+  readonly request: CacheContract;
 
-  readonly request: CacheInterface;
-
-  readonly singleton: CacheInterface;
+  readonly singleton: CacheContract;
 
   fork(type: ForkType): this;
 }
