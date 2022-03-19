@@ -4,6 +4,7 @@
   "type": "module",
   "main": "./build/commonjs/index.js",
   "module": "./build/module/index.js",
+  "typedocMain": "./source/index.ts",
   "types": "./build/types/index.d.ts",
   "exports": {
     ".": {
