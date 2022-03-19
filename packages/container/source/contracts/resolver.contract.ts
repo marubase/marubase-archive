@@ -1,12 +1,10 @@
-import { RegistryInterface, RegistryKey } from "./registry.contract.js";
-import { ScopeInterface } from "./scope.contract.js";
+import { RegistryContract, RegistryKey } from "./registry.contract.js";
+import { ScopeContract } from "./scope.contract.js";
 
-export const ResolverContract = Symbol("ResolverContract");
-
-export interface ResolverInterface {
+export interface ResolverContract {
   readonly dependencies: RegistryKey[];
 
-  readonly registry: RegistryInterface;
+  readonly registry: RegistryContract;
 
   readonly registryKey?: RegistryKey;
 
@@ -16,7 +14,7 @@ export interface ResolverInterface {
 
   clearRegistryKey(): this;
 
-  resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result;
+  resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result;
 
   setDependencies(...dependencies: RegistryKey[]): this;
 
@@ -26,20 +24,20 @@ export interface ResolverInterface {
 }
 
 export type ResolverFactory = {
-  createConstantResolver: (
-    registry: RegistryInterface,
+  createConstantResolver(
+    registry: RegistryContract,
     constant: unknown,
-  ) => ResolverInterface;
+  ): ResolverContract;
 
-  createConstructorResolver: (
-    registry: RegistryInterface,
+  createConstructorResolver(
+    registry: RegistryContract,
     constructor: Function,
-  ) => ResolverInterface;
+  ): ResolverContract;
 
-  createRegistryKeyResolver: (
-    registry: RegistryInterface,
+  createRegistryKeyResolver(
+    registry: RegistryContract,
     targetKey: RegistryKey,
-  ) => ResolverInterface;
+  ): ResolverContract;
 };
 
 export type ResolverScope = "container" | "request" | "singleton" | "transient";
