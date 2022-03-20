@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { Container } from "./container.js";
+import { Provider } from "./contracts/container.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
 import { BaseResolver } from "./resolvers/base-resolver.js";
@@ -9,6 +10,43 @@ describe("Container", function () {
   let container: Container;
   beforeEach(async function () {
     container = new Container();
+  });
+
+  describe("get booted", function () {
+    context("when container is booted", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return true", async function () {
+        const returnBooted = container.booted;
+        expect(returnBooted).to.be.true;
+      });
+    });
+    context("when container is not booted", function () {
+      it("should return false", async function () {
+        const returnBooted = container.booted;
+        expect(returnBooted).to.be.false;
+      });
+    });
+  });
+
+  describe("get providerMap", function () {
+    context("when there is provider", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = {};
+        container.install("provider", argProvider);
+      });
+      it("should return provider map", async function () {
+        const returnProviderMap = container.providerMap;
+        expect(returnProviderMap).to.be.an.instanceOf(Map);
+      });
+    });
+    context("when there is no provider", function () {
+      it("should return provider map", async function () {
+        const returnProviderMap = container.providerMap;
+        expect(returnProviderMap).to.be.an.instanceOf(Map);
+      });
+    });
   });
 
   describe("get registry", function () {
@@ -38,10 +76,132 @@ describe("Container", function () {
     });
   });
 
+  describe("#boot()", function () {
+    context("when container is booted and provider with boot method is installed", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = { boot: () => Promise.resolve() };
+        container.install("provider", argProvider);
+        await container.boot();
+      });
+      it("should boot container", async function () {
+        await container.boot();
+        expect(container.booted).to.be.true;
+      });
+    });
+    context("when container is booted and provider with no boot method is installed", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = {};
+        container.install("provider", argProvider);
+        await container.boot();
+      });
+      it("should boot container", async function () {
+        await container.boot();
+        expect(container.booted).to.be.true;
+      });
+    });
+    context("when container is booted and no provider is installed", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should boot container", async function () {
+        await container.boot();
+        expect(container.booted).to.be.true;
+      });
+    });
+    context("when container is not booted", function () {
+      it("should boot container", async function () {
+        await container.boot();
+        expect(container.booted).to.be.true;
+      });
+    });
+  });
+
   describe("#fork()", function () {
     it("should return fork", async function () {
       const returnFork = container.fork();
       expect(returnFork).to.be.an.instanceOf(Container);
+    });
+  });
+
+  describe("#install(name, provider)", function () {
+    context("when container is booted and provider have boot method and install method", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const argProvider: Provider = { boot: () => Promise.resolve(), install: () => undefined };
+        const returnSelf = container.install("provider", argProvider);
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is booted and provider have boot method only", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const argProvider: Provider = { boot: () => Promise.resolve() };
+        const returnSelf = container.install("provider", argProvider);
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is booted and provider have install method only", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const argProvider: Provider = { install: () => undefined };
+        const returnSelf = container.install("provider", argProvider);
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is booted and provider have no methods", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const argProvider: Provider = {};
+        const returnSelf = container.install("provider", argProvider);
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is not booted and provider have install methods", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const argProvider: Provider = { install: () => undefined };
+        const returnSelf = container.install("provider", argProvider);
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is not booted and provider have no install methods", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const argProvider: Provider = {};
+        const returnSelf = container.install("provider", argProvider);
+        expect(returnSelf).to.equal(container);
+      });
+    });
+  });
+
+  describe("#installed(name)", function () {
+    context("when there is provider", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = {};
+        container.install("provider", argProvider);
+      });
+      it("should return true", async function () {
+        const returnInstalled = container.installed("provider");
+        expect(returnInstalled).to.be.true;
+      });
+    });
+    context("when there is no provider", function () {
+      it("should return false", async function () {
+        const returnInstalled = container.installed("provider");
+        expect(returnInstalled).to.be.false;
+      });
     });
   });
 
@@ -97,6 +257,111 @@ describe("Container", function () {
       it("should return undefined", async function () {
         const returnResolver = container.resolver(Date);
         expect(returnResolver).to.be.undefined;
+      });
+    });
+  });
+
+  describe("#shutdown()", function () {
+    context("when container is booted and provider with shutdown method is installed", function () {
+      beforeEach(async function () {
+        const provider: Provider = { shutdown: () => Promise.resolve() };
+        container.install("provider", provider);
+        await container.boot();
+      });
+      it("should shutdown container", async function () {
+        await container.shutdown();
+        expect(container.booted).to.be.false;
+      });
+    });
+    context("when container is booted and provider with no shutdown method is installed", function () {
+      beforeEach(async function () {
+        const provider: Provider = {};
+        container.install("provider", provider);
+        await container.boot();
+      });
+      it("should shutdown container", async function () {
+        await container.shutdown();
+        expect(container.booted).to.be.false;
+      });
+    });
+    context("when container is booted and no provider is installed", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should shutdown container", async function () {
+        await container.shutdown();
+        expect(container.booted).to.be.false;
+      });
+    });
+    context("when container is not booted", function () {
+      it("should shutdown container", async function () {
+        await container.shutdown();
+        expect(container.booted).to.be.false;
+      });
+    });
+  });
+
+  describe("#uninstall(name)", function () {
+    context("when container is booted and provider with shutdown method and uninstall method installed", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = { shutdown: () => Promise.resolve(), uninstall: () => undefined };
+        container.install("provider", argProvider);
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const returnSelf = container.uninstall("provider");
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is booted and provider with shutdown method installed", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = { shutdown: () => Promise.resolve() };
+        container.install("provider", argProvider);
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const returnSelf = container.uninstall("provider");
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is booted and provider with uninstall method installed", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = { uninstall: () => undefined };
+        container.install("provider", argProvider);
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const returnSelf = container.uninstall("provider");
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is booted and provider with no method installed", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = {};
+        container.install("provider", argProvider);
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const returnSelf = container.uninstall("provider");
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is booted and no provider installed", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const returnSelf = container.uninstall("provider");
+        expect(returnSelf).to.equal(container);
+      });
+    });
+    context("when container is not booted", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should return self", async function () {
+        const returnSelf = container.uninstall("provider");
+        expect(returnSelf).to.equal(container);
       });
     });
   });
