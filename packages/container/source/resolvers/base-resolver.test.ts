@@ -8,11 +8,15 @@ import { BaseResolver } from "./base-resolver.js";
 describe("BaseResolver", function () {
   let mockRegistry: RegistryContract;
   let mockScope: ScopeContract;
+  let instanceRegistry: RegistryContract;
+  let instanceScope: ScopeContract;
   let resolver: BaseResolver;
   beforeEach(async function () {
     mockRegistry = mock();
     mockScope = mock();
-    resolver = new BaseResolver(instance(mockRegistry));
+    instanceRegistry = instance(mockRegistry);
+    instanceScope = instance(mockScope);
+    resolver = new BaseResolver(instanceRegistry);
   });
 
   describe("get dependencies", function () {
@@ -136,7 +140,7 @@ describe("BaseResolver", function () {
 
   describe("#resolve(scope, ...args)", function () {
     it("should throw error", async function () {
-      const run = (): unknown => resolver.resolve(instance(mockScope));
+      const run = (): unknown => resolver.resolve(instanceScope);
       expect(run).to.throw(ContainerError);
     });
   });
