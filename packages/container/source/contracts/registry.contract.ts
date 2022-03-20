@@ -1,4 +1,5 @@
 import {
+  Callable,
   Resolvable,
   ResolverContract,
   ResolverFactory,
@@ -29,6 +30,8 @@ export type RegistryBindTo = {
   to(constructor: Function): ResolverContract;
 
   toAlias(alias: RegistryKey): ResolverContract;
+
+  toCallable(callable: Callable): ResolverContract;
 
   toConstant(constant: unknown): ResolverContract;
 
