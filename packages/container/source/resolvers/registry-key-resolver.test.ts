@@ -12,91 +12,81 @@ describe("RegistryKeyResolver", function () {
   let mockRegistry: RegistryContract;
   let mockResolver: ResolverContract;
   let mockScope: ScopeContract;
+  let instanceCache: CacheContract;
+  let instanceRegistry: RegistryContract;
+  let instanceResolver: ResolverContract;
+  let instanceScope: ScopeContract;
   beforeEach(async function () {
     mockCache = mock();
     mockRegistry = mock();
     mockScope = mock();
     mockResolver = mock();
+    instanceCache = instance(mockCache);
+    instanceRegistry = instance(mockRegistry);
+    instanceResolver = instance(mockResolver);
+    instanceScope = instance(mockScope);
   });
 
   describe("#resolve(scope, ...args)", function () {
     context("when scope is 'transient'", function () {
-      let proxy: ResolverContract;
       let resolver: RegistryKeyResolver;
-      let scope: ScopeContract;
       beforeEach(async function () {
-        resolver = new RegistryKeyResolver(instance(mockRegistry), "test");
-        scope = instance(mockScope);
-        proxy = instance(mockResolver);
+        resolver = new RegistryKeyResolver(instanceRegistry, "test");
 
-        when(mockRegistry.getResolverByKey("test")).thenReturn(proxy);
+        when(mockRegistry.getResolverByKey("test")).thenReturn(instanceResolver);
         when(mockResolver.scope).thenReturn("transient");
-        when(mockResolver.resolve<Date>(scope)).thenReturn(new Date());
+        when(mockResolver.resolve<Date>(instanceScope)).thenReturn(new Date());
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(scope);
+        const returnInstance = resolver.resolve(instanceScope);
         expect(returnInstance).to.be.an.instanceOf(Date);
       });
     });
     context("when scope is not 'transient' and is cache", function () {
-      let cache: CacheContract;
-      let proxy: ResolverContract;
       let resolver: RegistryKeyResolver;
-      let scope: ScopeContract;
       beforeEach(async function () {
-        resolver = new RegistryKeyResolver(instance(mockRegistry), "test");
-        cache = instance(mockCache);
-        scope = instance(mockScope);
-        proxy = instance(mockResolver);
+        resolver = new RegistryKeyResolver(instanceRegistry, "test");
 
-        when(mockRegistry.getResolverByKey("test")).thenReturn(proxy);
+        when(mockRegistry.getResolverByKey("test")).thenReturn(instanceResolver);
         when(mockResolver.scope).thenReturn("container");
-        when(mockScope.container).thenReturn(cache);
+        when(mockScope.container).thenReturn(instanceCache);
         when(mockCache.has("test")).thenReturn(true);
         when(mockCache.get("test")).thenReturn(new Date());
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(scope);
+        const returnInstance = resolver.resolve(instanceScope);
         expect(returnInstance).to.be.an.instanceOf(Date);
       });
     });
     context("when scope is not 'transient' and is not cache", function () {
-      let cache: CacheContract;
-      let proxy: ResolverContract;
       let resolver: RegistryKeyResolver;
-      let scope: ScopeContract;
       beforeEach(async function () {
-        resolver = new RegistryKeyResolver(instance(mockRegistry), "test");
-        cache = instance(mockCache);
-        scope = instance(mockScope);
-        proxy = instance(mockResolver);
+        resolver = new RegistryKeyResolver(instanceRegistry, "test");
 
-        when(mockRegistry.getResolverByKey("test")).thenReturn(proxy);
+        when(mockRegistry.getResolverByKey("test")).thenReturn(instanceResolver);
         when(mockResolver.scope).thenReturn("container");
-        when(mockScope.container).thenReturn(cache);
+        when(mockScope.container).thenReturn(instanceCache);
         when(mockCache.has("test")).thenReturn(false);
 
-        const date = new Date();
-        when(mockResolver.resolve<Date>(scope)).thenReturn(date);
-        when(mockCache.set("test", date)).thenReturn(cache);
-        when(mockCache.get("test")).thenReturn(date);
+        const fixedDate = new Date();
+        when(mockResolver.resolve<Date>(instanceScope)).thenReturn(fixedDate);
+        when(mockCache.set("test", fixedDate)).thenReturn(instanceCache);
+        when(mockCache.get("test")).thenReturn(fixedDate);
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(scope);
+        const returnInstance = resolver.resolve(instanceScope);
         expect(returnInstance).to.be.an.instanceOf(Date);
       });
     });
     context("when target key is not found", function () {
       let resolver: RegistryKeyResolver;
-      let scope: ScopeContract;
       beforeEach(async function () {
-        resolver = new RegistryKeyResolver(instance(mockRegistry), "test");
-        scope = instance(mockScope);
+        resolver = new RegistryKeyResolver(instanceRegistry, "test");
 
         when(mockRegistry.getResolverByKey("test")).thenReturn(undefined);
       });
       it("should throw error", async function () {
-        const run = (): unknown => resolver.resolve(scope);
+        const run = (): unknown => resolver.resolve(instanceScope);
         expect(run).to.throw(ContainerError);
       });
     });
