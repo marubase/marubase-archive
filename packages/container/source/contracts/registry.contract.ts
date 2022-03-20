@@ -1,4 +1,8 @@
-import { ResolverContract, ResolverFactory } from "./resolver.contract.js";
+import {
+  Resolvable,
+  ResolverContract,
+  ResolverFactory,
+} from "./resolver.contract.js";
 import { ScopeContract } from "./scope.contract.js";
 
 export interface RegistryContract {
@@ -13,7 +17,7 @@ export interface RegistryContract {
   getResolverByKey(key: RegistryKey): ResolverContract | undefined;
 
   resolve<Result>(
-    resolvable: RegistryResolvable,
+    resolvable: Resolvable,
     scope: ScopeContract,
     ...args: unknown[]
   ): Result;
@@ -32,5 +36,3 @@ export type RegistryBindTo = {
 };
 
 export type RegistryKey = Function | string | symbol;
-
-export type RegistryResolvable = RegistryKey;
