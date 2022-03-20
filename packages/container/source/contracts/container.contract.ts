@@ -24,6 +24,8 @@ export interface ContainerContract {
 
   install(name: ProviderName, provider: Provider): this;
 
+  installed(name: ProviderName): boolean;
+
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
   resolveTag<Result>(tag: RegistryTag, ...args: unknown[]): Result[];
