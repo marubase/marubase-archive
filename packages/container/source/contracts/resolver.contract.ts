@@ -39,6 +39,11 @@ export type ResolverFactory = {
     constant: unknown,
   ): ResolverContract;
 
+  createFunctionResolver(
+    registry: RegistryContract,
+    targetFn: Function,
+  ): ResolverContract;
+
   createRegistryKeyResolver(
     registry: RegistryContract,
     targetKey: RegistryKey,
@@ -50,6 +55,8 @@ export type Callable = [RegistryKey, string | symbol];
 export type Resolvable = Callable | RegistryKey;
 
 export type ResolvableClass<Instance> = new (...args: unknown[]) => Instance;
+
+export type ResolvableFunction<Result> = (...args: unknown[]) => Result;
 
 export type ResolvableInstance<Result> = {
   [method: string | symbol]: (...args: unknown[]) => Result;
