@@ -49,6 +49,25 @@ describe("Registry", function () {
     });
   });
 
+  describe("get tagMap", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        const argTagSet = new Set(["tag"]);
+        registry.setResolverByTags(argTagSet, instanceResolver);
+      });
+      it("should return tag map", async function () {
+        const returnTagMap = registry.tagMap;
+        expect(returnTagMap).to.be.an.instanceOf(Map);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return tag map", async function () {
+        const returnTagMap = registry.tagMap;
+        expect(returnTagMap).to.be.an.instanceOf(Map);
+      });
+    });
+  });
+
   describe("#bind(key).to(constructor)", function () {
     context("when there is record", function () {
       beforeEach(async function () {
@@ -165,6 +184,25 @@ describe("Registry", function () {
     });
   });
 
+  describe("#bind(key).toTag(constant)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        const argTagSet = new Set(["tag"]);
+        registry.setResolverByTags(argTagSet, instanceResolver);
+      });
+      it("should return resolver", async function () {
+        const returnResolver = registry.bind(Date).toTag("tag");
+        expect(returnResolver).to.be.an.instanceOf(BaseResolver);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return resolver", async function () {
+        const returnResolver = registry.bind(Date).toTag("tag");
+        expect(returnResolver).to.be.an.instanceOf(BaseResolver);
+      });
+    });
+  });
+
   describe("#clearResolverByKey(key)", function () {
     context("when there is record", function () {
       beforeEach(async function () {
@@ -178,6 +216,42 @@ describe("Registry", function () {
     context("when there is no record", function () {
       it("should return self", async function () {
         const returnSelf = registry.clearResolverByKey("key");
+        expect(returnSelf).to.equal(registry);
+      });
+    });
+  });
+
+  describe("#clearResolverByTags(tagSet, resolver)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        const argTagSet = new Set(["tag"]);
+        registry.setResolverByTags(argTagSet, instanceResolver);
+      });
+      it("should return self", async function () {
+        const argTagSet = new Set(["tag"]);
+        const returnSelf = registry.clearResolverByTags(argTagSet, instanceResolver);
+        expect(returnSelf).to.equal(registry);
+      });
+    });
+    context("when there is record after first clear", function () {
+      beforeEach(async function () {
+        const argTagSet = new Set(["tag"]);
+        registry.setResolverByTags(argTagSet, instanceResolver);
+
+        const mockExtra = mock<ResolverContract>();
+        const instanceExtra = instance(mockExtra);
+        registry.setResolverByTags(argTagSet, instance(instanceExtra));
+      });
+      it("should return self", async function () {
+        const argTagSet = new Set(["tag"]);
+        const returnSelf = registry.clearResolverByTags(argTagSet, instanceResolver);
+        expect(returnSelf).to.equal(registry);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return self", async function () {
+        const argTagSet = new Set(["tag"]);
+        const returnSelf = registry.clearResolverByTags(argTagSet, instanceResolver);
         expect(returnSelf).to.equal(registry);
       });
     });
@@ -197,6 +271,27 @@ describe("Registry", function () {
       it("should return undefined", async function () {
         const returnResolver = registry.getResolverByKey("key");
         expect(returnResolver).to.be.undefined;
+      });
+    });
+  });
+
+  describe("#getResolverByTag(tagr)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        const argTagSet = new Set(["tag"]);
+        registry.setResolverByTags(argTagSet, instanceResolver);
+      });
+      it("should return resolvers", async function () {
+        const returnResolvers = registry.getResolverByTag("tag");
+        expect(returnResolvers).to.be.an("array");
+        expect(returnResolvers).to.have.lengthOf(1);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return undefined", async function () {
+        const returnResolvers = registry.getResolverByTag("tag");
+        expect(returnResolvers).to.be.an("array");
+        expect(returnResolvers).to.have.lengthOf(0);
       });
     });
   });
@@ -246,6 +341,29 @@ describe("Registry", function () {
     });
   });
 
+  describe("#resolveTags(tag)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        const argTagSet = new Set(["tag"]);
+        registry.setResolverByTags(argTagSet, instanceResolver);
+
+        when(mockResolver.resolve<Date>(instanceScope)).thenReturn(new Date());
+      });
+      it("should return instances", async function () {
+        const returnInstances = registry.resolveTag("tag", instanceScope);
+        expect(returnInstances).to.be.an("array");
+        expect(returnInstances).to.have.lengthOf(1);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return instances", async function () {
+        const returnInstances = registry.resolveTag("tag", instanceScope);
+        expect(returnInstances).to.be.an("array");
+        expect(returnInstances).to.have.lengthOf(0);
+      });
+    });
+  });
+
   describe("#setResolverByKey(key, resolver)", function () {
     context("when there is record", function () {
       beforeEach(async function () {
@@ -259,6 +377,27 @@ describe("Registry", function () {
     context("when there is no record", function () {
       it("should return self", async function () {
         const returnSelf = registry.setResolverByKey("key", instanceResolver);
+        expect(returnSelf).to.equal(registry);
+      });
+    });
+  });
+
+  describe("#setResolverByTags(tagSet, resolver)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        const argTagSet = new Set(["tag"]);
+        registry.setResolverByTags(argTagSet, instanceResolver);
+      });
+      it("should return self", async function () {
+        const argTagSet = new Set(["tag"]);
+        const returnSelf = registry.setResolverByTags(argTagSet, instanceResolver);
+        expect(returnSelf).to.equal(registry);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return self", async function () {
+        const argTagSet = new Set(["tag"]);
+        const returnSelf = registry.setResolverByTags(argTagSet, instanceResolver);
         expect(returnSelf).to.equal(registry);
       });
     });
