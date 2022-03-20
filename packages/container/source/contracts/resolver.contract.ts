@@ -40,6 +40,8 @@ export type ResolverFactory = {
   ): ResolverContract;
 };
 
+export type Resolvable = RegistryKey;
+
 export type ResolvableClass<Instance> = new (...args: unknown[]) => Instance;
 
 export type ResolverScope = "container" | "request" | "singleton" | "transient";
