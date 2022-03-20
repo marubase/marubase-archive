@@ -10,6 +10,7 @@ import {
 } from "./contracts/resolver.contract.js";
 import { ScopeContract } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
+import { CallableResolver } from "./resolvers/callable-resolver.js";
 import { ClassResolver } from "./resolvers/class-resolver.js";
 import { ConstantResolver } from "./resolvers/constant-resolver.js";
 import { RegistryKeyResolver } from "./resolvers/registry-key-resolver.js";
@@ -41,6 +42,11 @@ export class Registry implements RegistryContract {
       toAlias: (alias) =>
         this._resolverFactory
           .createRegistryKeyResolver(this, alias)
+          .setRegistryKey(key),
+
+      toCallable: (callable) =>
+        this._resolverFactory
+          .createCallableResolver(this, callable)
           .setRegistryKey(key),
 
       toConstant: (constant) =>
@@ -76,9 +82,18 @@ export class Registry implements RegistryContract {
     scope: ScopeContract,
     ...args: unknown[]
   ): Result {
-    return this._resolverFactory
-      .createRegistryKeyResolver(this, resolvable)
-      .resolve(scope, ...args);
+    if (typeof resolvable === "string") {
+      const callable = /^([0-9A-Za-z]+)#([0-9A-Za-z]+)$/i;
+      const match = resolvable.match(callable);
+      if (match) resolvable = [match[1], match[2]];
+    }
+    return Array.isArray(resolvable)
+      ? this._resolverFactory
+          .createCallableResolver(this, resolvable)
+          .resolve(scope, ...args)
+      : this._resolverFactory
+          .createRegistryKeyResolver(this, resolvable)
+          .resolve(scope, ...args);
   }
 
   public setResolverByKey(key: RegistryKey, resolver: ResolverContract): this {
@@ -88,6 +103,9 @@ export class Registry implements RegistryContract {
 }
 
 export const DefaultResolverFactory: ResolverFactory = {
+  createCallableResolver: (registry, callable) =>
+    new CallableResolver(registry, callable),
+
   createClassResolver: (registry, targetClass) =>
     new ClassResolver(registry, targetClass),
 
