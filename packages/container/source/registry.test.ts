@@ -44,6 +44,7 @@ describe("Registry", function () {
       expect(returnResolverFactory).to.have.property("createCallableResolver");
       expect(returnResolverFactory).to.have.property("createClassResolver");
       expect(returnResolverFactory).to.have.property("createConstantResolver");
+      expect(returnResolverFactory).to.have.property("createFunctionResolver");
       expect(returnResolverFactory).to.have.property("createRegistryKeyResolver");
     });
   });
@@ -117,6 +118,24 @@ describe("Registry", function () {
     context("when there is no record", function () {
       it("should return resolver", async function () {
         const returnResolver = registry.bind(Date).toConstant(new Date());
+        expect(returnResolver).to.be.an.instanceOf(BaseResolver);
+      });
+    });
+  });
+
+  describe("#bind(key).toFunction(constant)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        registry.setResolverByKey(Date, instanceResolver);
+      });
+      it("should return resolver", async function () {
+        const returnResolver = registry.bind(Date).toFunction(() => new Date());
+        expect(returnResolver).to.be.an.instanceOf(BaseResolver);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return resolver", async function () {
+        const returnResolver = registry.bind(Date).toFunction(() => new Date());
         expect(returnResolver).to.be.an.instanceOf(BaseResolver);
       });
     });
