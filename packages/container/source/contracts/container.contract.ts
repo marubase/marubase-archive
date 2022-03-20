@@ -2,9 +2,8 @@ import {
   RegistryBindTo,
   RegistryContract,
   RegistryKey,
-  RegistryResolvable,
 } from "./registry.contract.js";
-import { ResolverContract } from "./resolver.contract.js";
+import { Resolvable, ResolverContract } from "./resolver.contract.js";
 import { ScopeContract } from "./scope.contract.js";
 
 export interface ContainerContract {
@@ -14,7 +13,7 @@ export interface ContainerContract {
 
   bind(key: RegistryKey): RegistryBindTo;
 
-  getResolverByKey(key: RegistryKey): ResolverContract | undefined;
+  resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
-  resolve<Result>(resolvable: RegistryResolvable, ...args: unknown[]): Result;
+  resolver(key: RegistryKey): ResolverContract | undefined;
 }
