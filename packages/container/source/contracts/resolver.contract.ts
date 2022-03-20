@@ -24,6 +24,11 @@ export interface ResolverContract {
 }
 
 export type ResolverFactory = {
+  createCallableResolver(
+    registry: RegistryContract,
+    callable: Callable,
+  ): ResolverContract;
+
   createClassResolver(
     registry: RegistryContract,
     targetClass: Function,
@@ -40,8 +45,14 @@ export type ResolverFactory = {
   ): ResolverContract;
 };
 
-export type Resolvable = RegistryKey;
+export type Callable = [RegistryKey, string | symbol];
+
+export type Resolvable = Callable | RegistryKey;
 
 export type ResolvableClass<Instance> = new (...args: unknown[]) => Instance;
+
+export type ResolvableInstance<Result> = {
+  [method: string | symbol]: (...args: unknown[]) => Result;
+};
 
 export type ResolverScope = "container" | "request" | "singleton" | "transient";
