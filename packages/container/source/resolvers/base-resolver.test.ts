@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { instance, mock } from "ts-mockito";
-import { RegistryContract, RegistryKey } from "../contracts/registry.contract.js";
+import { RegistryContract, RegistryKey, RegistryTag } from "../contracts/registry.contract.js";
 import { ScopeContract } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
 import { BaseResolver } from "./base-resolver.js";
@@ -65,6 +65,27 @@ describe("BaseResolver", function () {
     });
   });
 
+  describe("get tags", function () {
+    context("when there is tags", function () {
+      beforeEach(async function () {
+        const argTags = ["tag0", "tag1"];
+        resolver.setRegistryTags(...argTags);
+      });
+      it("should return tags", async function () {
+        const returnTags = resolver.registryTags;
+        const testTags = ["tag0", "tag1"];
+        expect(returnTags).to.deep.equal(testTags);
+      });
+    });
+    context("when there is no tags", function () {
+      it("should return tags", async function () {
+        const returnTags = resolver.registryTags;
+        const testTags: RegistryTag[] = [];
+        expect(returnTags).to.deep.equal(testTags);
+      });
+    });
+  });
+
   describe("get scope", function () {
     context("when scope is 'container'", function () {
       beforeEach(async function () {
@@ -113,7 +134,7 @@ describe("BaseResolver", function () {
       });
     });
     context("when there is no dependencies", function () {
-      it("should return dependencies", async function () {
+      it("should return self", async function () {
         const returnSelf = resolver.clearDependencies();
         expect(returnSelf).to.equal(resolver);
       });
@@ -125,14 +146,33 @@ describe("BaseResolver", function () {
       beforeEach(async function () {
         resolver.setRegistryKey("test");
       });
-      it("should return registry key", async function () {
+      it("should return self", async function () {
         const returnSelf = resolver.clearRegistryKey();
         expect(returnSelf).to.equal(resolver);
       });
     });
     context("when there is no registryKey", function () {
-      it("should return undefined", async function () {
+      it("should return self", async function () {
         const returnSelf = resolver.clearRegistryKey();
+        expect(returnSelf).to.equal(resolver);
+      });
+    });
+  });
+
+  describe("#clearRegistryTags()", function () {
+    context("when there is tags", function () {
+      beforeEach(async function () {
+        const argTags = ["tag0", "tag1"];
+        resolver.setRegistryTags(...argTags);
+      });
+      it("should return self", async function () {
+        const returnSelf = resolver.clearRegistryTags();
+        expect(returnSelf).to.equal(resolver);
+      });
+    });
+    context("when there is no tags", function () {
+      it("should return self", async function () {
+        const returnSelf = resolver.clearRegistryTags();
         expect(returnSelf).to.equal(resolver);
       });
     });
@@ -179,6 +219,27 @@ describe("BaseResolver", function () {
     context("when there is no registry key", function () {
       it("should return self", async function () {
         const returnSelf = resolver.setRegistryKey("test");
+        expect(returnSelf).to.equal(resolver);
+      });
+    });
+  });
+
+  describe("#setRegistryTags(...tags)", function () {
+    context("when there is tags", function () {
+      beforeEach(async function () {
+        const argTags = ["tag0", "tag1"];
+        resolver.setRegistryTags(...argTags);
+      });
+      it("should return self", async function () {
+        const argTags = ["tag0", "tag1"];
+        const returnSelf = resolver.setRegistryTags(...argTags);
+        expect(returnSelf).to.equal(resolver);
+      });
+    });
+    context("when there is no tags", function () {
+      it("should return self", async function () {
+        const argTags = ["tag0", "tag1"];
+        const returnSelf = resolver.setRegistryTags(...argTags);
         expect(returnSelf).to.equal(resolver);
       });
     });
