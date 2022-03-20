@@ -2,9 +2,9 @@ import { ResolverContract, ResolverFactory } from "./resolver.contract.js";
 import { ScopeContract } from "./scope.contract.js";
 
 export interface RegistryContract {
-  readonly factory: ResolverFactory;
-
   readonly keyMap: Map<RegistryKey, ResolverContract>;
+
+  readonly resolverFactory: ResolverFactory;
 
   bind(key: RegistryKey): RegistryBindTo;
 
