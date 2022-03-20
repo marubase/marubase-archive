@@ -34,6 +34,7 @@ describe("Container", function () {
       expect(returnFluentApi).to.have.property("toConstant");
       expect(returnFluentApi).to.have.property("toFunction");
       expect(returnFluentApi).to.have.property("toSelf");
+      expect(returnFluentApi).to.have.property("toTag");
     });
   });
 
@@ -58,6 +59,26 @@ describe("Container", function () {
       it("should throw error", async function () {
         const run = (): unknown => container.resolve(Date);
         expect(run).to.throw(ContainerError);
+      });
+    });
+  });
+
+  describe("#resolveTag(tag, ...args)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        container.bind(Date).toSelf().setRegistryTags("tag");
+      });
+      it("should return instances", async function () {
+        const returnInstances = container.resolveTag("tag");
+        expect(returnInstances).to.be.an("array");
+        expect(returnInstances).to.have.lengthOf(1);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return instances", async function () {
+        const returnInstances = container.resolveTag("tag");
+        expect(returnInstances).to.be.an("array");
+        expect(returnInstances).to.have.lengthOf(0);
       });
     });
   });
