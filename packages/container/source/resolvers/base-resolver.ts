@@ -1,6 +1,7 @@
 import {
   RegistryContract,
   RegistryKey,
+  RegistryTag,
 } from "../contracts/registry.contract.js";
 import {
   ResolverContract,
@@ -15,6 +16,8 @@ export class BaseResolver implements ResolverContract {
   protected _registry: RegistryContract;
 
   protected _registryKey?: RegistryKey;
+
+  protected _registryTagSet = new Set<RegistryTag>();
 
   protected _scope: ResolverScope = "transient";
 
@@ -34,6 +37,10 @@ export class BaseResolver implements ResolverContract {
     return this._registryKey;
   }
 
+  public get registryTags(): RegistryTag[] {
+    return Array.from(this._registryTagSet);
+  }
+
   public get scope(): ResolverScope {
     return this._scope;
   }
@@ -47,6 +54,13 @@ export class BaseResolver implements ResolverContract {
     if (typeof this._registryKey === "undefined") return this;
     this._registry.clearResolverByKey(this._registryKey);
     delete this._registryKey;
+    return this;
+  }
+
+  public clearRegistryTags(): this {
+    if (this._registryTagSet.size < 1) return this;
+    this._registry.clearResolverByTags(this._registryTagSet, this);
+    this._registryTagSet.clear();
     return this;
   }
 
@@ -67,6 +81,13 @@ export class BaseResolver implements ResolverContract {
     if (typeof this._registryKey !== "undefined") this.clearRegistryKey();
     this._registryKey = registryKey;
     this._registry.setResolverByKey(this._registryKey, this);
+    return this;
+  }
+
+  public setRegistryTags(...tags: RegistryTag[]): this {
+    if (this._registryTagSet.size > 0) this.clearRegistryTags();
+    this._registryTagSet = new Set(tags);
+    this._registry.setResolverByTags(this._registryTagSet, this);
     return this;
   }
 
