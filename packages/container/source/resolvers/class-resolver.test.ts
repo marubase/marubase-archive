@@ -7,36 +7,36 @@ import { ClassResolver } from "./class-resolver.js";
 describe("ClassResolver", function () {
   let mockRegistry: RegistryContract;
   let mockScope: ScopeContract;
+  let instanceRegistry: RegistryContract;
+  let instanceScope: ScopeContract;
   beforeEach(async function () {
     mockRegistry = mock();
     mockScope = mock();
+    instanceRegistry = instance(mockRegistry);
+    instanceScope = instance(mockScope);
   });
 
   describe("#resolve(scope, ...args)", function () {
     context("when there is dependencies", function () {
       let resolver: ClassResolver;
-      let scope: ScopeContract;
       beforeEach(async function () {
-        resolver = new ClassResolver(instance(mockRegistry), Date);
-        scope = instance(mockScope);
+        resolver = new ClassResolver(instanceRegistry, Date);
         resolver.setDependencies("date");
 
-        when(mockRegistry.resolve<string>("date", scope)).thenReturn("1990-09-03");
+        when(mockRegistry.resolve<string>("date", instanceScope)).thenReturn("1990-09-03");
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(scope);
+        const returnInstance = resolver.resolve(instanceScope);
         expect(returnInstance).to.be.an.instanceOf(Date);
       });
     });
     context("when there is no dependencies", function () {
       let resolver: ClassResolver;
-      let scope: ScopeContract;
       beforeEach(async function () {
-        resolver = new ClassResolver(instance(mockRegistry), Date);
-        scope = instance(mockScope);
+        resolver = new ClassResolver(instanceRegistry, Date);
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(scope);
+        const returnInstance = resolver.resolve(instanceScope);
         expect(returnInstance).to.be.an.instanceOf(Date);
       });
     });
