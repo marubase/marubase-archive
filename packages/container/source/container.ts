@@ -3,6 +3,7 @@ import {
   RegistryBindTo,
   RegistryContract,
   RegistryKey,
+  RegistryTag,
 } from "./contracts/registry.contract.js";
 import { ResolverContract } from "./contracts/resolver.contract.js";
 import { ScopeContract } from "./contracts/scope.contract.js";
@@ -41,6 +42,11 @@ export class Container implements ContainerContract {
   public resolve<Result>(resolvable: RegistryKey, ...args: unknown[]): Result {
     const requestScope = this._scope.fork("request");
     return this._registry.resolve(resolvable, requestScope, ...args);
+  }
+
+  public resolveTag<Result>(tag: RegistryTag, ...args: unknown[]): Result[] {
+    const requestScope = this._scope.fork("request");
+    return this._registry.resolveTag(tag, requestScope, ...args);
   }
 
   public resolver(key: RegistryKey): ResolverContract | undefined {
