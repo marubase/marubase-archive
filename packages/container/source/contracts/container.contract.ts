@@ -13,6 +13,8 @@ export interface ContainerContract {
 
   bind(key: RegistryKey): RegistryBindTo;
 
+  fork(): this;
+
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
   resolver(key: RegistryKey): ResolverContract | undefined;
