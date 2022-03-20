@@ -12,15 +12,15 @@ export interface ResolverContract {
 
   readonly registryKey?: RegistryKey;
 
-  readonly scope: ResolverScope;
+  readonly registryTags: RegistryTag[];
 
-  readonly tags: RegistryTag[];
+  readonly scope: ResolverScope;
 
   clearDependencies(): this;
 
   clearRegistryKey(): this;
 
-  clearTags(): this;
+  clearRegistryTags(): this;
 
   resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result;
 
@@ -28,9 +28,9 @@ export interface ResolverContract {
 
   setRegistryKey(registryKey: RegistryKey): this;
 
-  setScope(scope: ResolverScope): this;
+  setRegistryTags(...tags: RegistryTag[]): this;
 
-  setTags(...tags: RegistryTag[]): this;
+  setScope(scope: ResolverScope): this;
 }
 
 export type ResolverFactory = {
