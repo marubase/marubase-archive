@@ -13,6 +13,7 @@ import { ContainerError } from "./errors/container.error.js";
 import { CallableResolver } from "./resolvers/callable-resolver.js";
 import { ClassResolver } from "./resolvers/class-resolver.js";
 import { ConstantResolver } from "./resolvers/constant-resolver.js";
+import { FunctionResolver } from "./resolvers/function-resolver.js";
 import { RegistryKeyResolver } from "./resolvers/registry-key-resolver.js";
 
 export class Registry implements RegistryContract {
@@ -34,14 +35,14 @@ export class Registry implements RegistryContract {
 
   public bind(key: RegistryKey): RegistryBindTo {
     return {
-      to: (constructor: Function) =>
+      to: (targetClass) =>
         this._resolverFactory
-          .createClassResolver(this, constructor)
+          .createClassResolver(this, targetClass)
           .setRegistryKey(key),
 
-      toAlias: (alias) =>
+      toAlias: (targetKey) =>
         this._resolverFactory
-          .createRegistryKeyResolver(this, alias)
+          .createRegistryKeyResolver(this, targetKey)
           .setRegistryKey(key),
 
       toCallable: (callable) =>
@@ -52,6 +53,11 @@ export class Registry implements RegistryContract {
       toConstant: (constant) =>
         this._resolverFactory
           .createConstantResolver(this, constant)
+          .setRegistryKey(key),
+
+      toFunction: (targetFn) =>
+        this._resolverFactory
+          .createFunctionResolver(this, targetFn)
           .setRegistryKey(key),
 
       toSelf: () => {
@@ -111,6 +117,9 @@ export const DefaultResolverFactory: ResolverFactory = {
 
   createConstantResolver: (registry, constant) =>
     new ConstantResolver(registry, constant),
+
+  createFunctionResolver: (registry, targetFn) =>
+    new FunctionResolver(registry, targetFn),
 
   createRegistryKeyResolver: (registry, targetKey) =>
     new RegistryKeyResolver(registry, targetKey),
