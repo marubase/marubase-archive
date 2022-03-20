@@ -32,6 +32,7 @@ describe("Container", function () {
       expect(returnFluentApi).to.have.property("toAlias");
       expect(returnFluentApi).to.have.property("toCallable");
       expect(returnFluentApi).to.have.property("toConstant");
+      expect(returnFluentApi).to.have.property("toFunction");
       expect(returnFluentApi).to.have.property("toSelf");
     });
   });
