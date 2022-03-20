@@ -1,4 +1,8 @@
-import { RegistryContract, RegistryKey } from "./registry.contract.js";
+import {
+  RegistryContract,
+  RegistryKey,
+  RegistryTag,
+} from "./registry.contract.js";
 import { ScopeContract } from "./scope.contract.js";
 
 export interface ResolverContract {
@@ -10,9 +14,13 @@ export interface ResolverContract {
 
   readonly scope: ResolverScope;
 
+  readonly tags: RegistryTag[];
+
   clearDependencies(): this;
 
   clearRegistryKey(): this;
+
+  clearTags(): this;
 
   resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result;
 
@@ -21,6 +29,8 @@ export interface ResolverContract {
   setRegistryKey(registryKey: RegistryKey): this;
 
   setScope(scope: ResolverScope): this;
+
+  setTags(...tags: RegistryTag[]): this;
 }
 
 export type ResolverFactory = {
@@ -47,6 +57,11 @@ export type ResolverFactory = {
   createRegistryKeyResolver(
     registry: RegistryContract,
     targetKey: RegistryKey,
+  ): ResolverContract;
+
+  createRegistryTagResolver(
+    registry: RegistryContract,
+    targetTag: RegistryTag,
   ): ResolverContract;
 };
 
