@@ -2,6 +2,7 @@ import {
   RegistryBindTo,
   RegistryContract,
   RegistryKey,
+  RegistryTag,
 } from "./contracts/registry.contract.js";
 import {
   Resolvable,
@@ -15,11 +16,14 @@ import { ClassResolver } from "./resolvers/class-resolver.js";
 import { ConstantResolver } from "./resolvers/constant-resolver.js";
 import { FunctionResolver } from "./resolvers/function-resolver.js";
 import { RegistryKeyResolver } from "./resolvers/registry-key-resolver.js";
+import { RegistryTagResolver } from "./resolvers/registry-tag-resolver.js";
 
 export class Registry implements RegistryContract {
   protected _keyMap = new Map<RegistryKey, ResolverContract>();
 
   protected _resolverFactory: ResolverFactory;
+
+  protected _tagMap = new Map<RegistryTag, Set<ResolverContract>>();
 
   public constructor(resolverFactory = DefaultResolverFactory) {
     this._resolverFactory = resolverFactory;
@@ -31,6 +35,10 @@ export class Registry implements RegistryContract {
 
   public get resolverFactory(): ResolverFactory {
     return this._resolverFactory;
+  }
+
+  public get tagMap(): Map<RegistryTag, Set<ResolverContract>> {
+    return this._tagMap;
   }
 
   public bind(key: RegistryKey): RegistryBindTo {
@@ -71,6 +79,11 @@ export class Registry implements RegistryContract {
           .createClassResolver(this, key)
           .setRegistryKey(key);
       },
+
+      toTag: (targetTag) =>
+        this._resolverFactory
+          .createRegistryTagResolver(this, targetTag)
+          .setRegistryKey(key),
     };
   }
 
@@ -79,8 +92,27 @@ export class Registry implements RegistryContract {
     return this;
   }
 
+  public clearResolverByTags(
+    tagSet: Set<RegistryTag>,
+    resolver: ResolverContract,
+  ): this {
+    for (const tag of tagSet) {
+      const resolverSet = this._tagMap.get(tag);
+      if (typeof resolverSet === "undefined") continue;
+
+      resolverSet.delete(resolver);
+      if (resolverSet.size < 1) this._tagMap.delete(tag);
+    }
+    return this;
+  }
+
   public getResolverByKey(key: RegistryKey): ResolverContract | undefined {
     return this._keyMap.get(key);
+  }
+
+  public getResolverByTag(tag: RegistryTag): ResolverContract[] {
+    const resolverSet = this._tagMap.get(tag);
+    return typeof resolverSet !== "undefined" ? Array.from(resolverSet) : [];
   }
 
   public resolve<Result>(
@@ -102,8 +134,31 @@ export class Registry implements RegistryContract {
           .resolve(scope, ...args);
   }
 
+  public resolveTag<Result>(
+    tag: RegistryTag,
+    scope: ScopeContract,
+    ...args: unknown[]
+  ): Result[] {
+    return this._resolverFactory
+      .createRegistryTagResolver(this, tag)
+      .resolve(scope, ...args);
+  }
+
   public setResolverByKey(key: RegistryKey, resolver: ResolverContract): this {
     this._keyMap.set(key, resolver);
+    return this;
+  }
+
+  public setResolverByTags(
+    tagSet: Set<RegistryTag>,
+    resolver: ResolverContract,
+  ): this {
+    for (const tag of tagSet) {
+      if (!this._tagMap.has(tag)) this._tagMap.set(tag, new Set());
+
+      const resolverSet = this._tagMap.get(tag) as Set<ResolverContract>;
+      resolverSet.add(resolver);
+    }
     return this;
   }
 }
@@ -123,4 +178,7 @@ export const DefaultResolverFactory: ResolverFactory = {
 
   createRegistryKeyResolver: (registry, targetKey) =>
     new RegistryKeyResolver(registry, targetKey),
+
+  createRegistryTagResolver: (registry, targetTag) =>
+    new RegistryTagResolver(registry, targetTag),
 };
