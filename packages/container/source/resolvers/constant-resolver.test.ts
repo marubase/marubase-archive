@@ -7,39 +7,43 @@ import { ConstantResolver } from "./constant-resolver.js";
 describe("ConstantResolver", function () {
   let mockRegistry: RegistryContract;
   let mockScope: ScopeContract;
+  let instanceRegistry: RegistryContract;
+  let instanceScope: ScopeContract;
   beforeEach(async function () {
     mockRegistry = mock();
     mockScope = mock();
+    instanceRegistry = instance(mockRegistry);
+    instanceScope = instance(mockScope);
   });
 
   describe("#resolve(scope, ...args)", function () {
     context("when constant is boolean", function () {
       let resolver: ConstantResolver;
       beforeEach(async function () {
-        resolver = new ConstantResolver(instance(mockRegistry), true);
+        resolver = new ConstantResolver(instanceRegistry, true);
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(instance(mockScope));
+        const returnInstance = resolver.resolve(instanceScope);
         expect(returnInstance).to.equal(true);
       });
     });
     context("when constant is number", function () {
       let resolver: ConstantResolver;
       beforeEach(async function () {
-        resolver = new ConstantResolver(instance(mockRegistry), 1);
+        resolver = new ConstantResolver(instanceRegistry, Number.MAX_SAFE_INTEGER);
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(instance(mockScope));
-        expect(returnInstance).to.equal(1);
+        const returnInstance = resolver.resolve(instanceScope);
+        expect(returnInstance).to.equal(Number.MAX_SAFE_INTEGER);
       });
     });
     context("when constant is string", function () {
       let resolver: ConstantResolver;
       beforeEach(async function () {
-        resolver = new ConstantResolver(instance(mockRegistry), "test");
+        resolver = new ConstantResolver(instanceRegistry, "test");
       });
       it("should return instance", async function () {
-        const returnInstance = resolver.resolve(instance(mockScope));
+        const returnInstance = resolver.resolve(instanceScope);
         expect(returnInstance).to.equal("test");
       });
     });
