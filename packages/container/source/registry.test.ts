@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { instance, mock, when } from "ts-mockito";
-import { ResolverContract } from "./contracts/resolver.contract.js";
+import { Callable, ResolverContract } from "./contracts/resolver.contract.js";
 import { ScopeContract } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
@@ -41,6 +41,7 @@ describe("Registry", function () {
   describe("get resolverFactory", function () {
     it("should return resolver factory", async function () {
       const returnResolverFactory = registry.resolverFactory;
+      expect(returnResolverFactory).to.have.property("createCallableResolver");
       expect(returnResolverFactory).to.have.property("createClassResolver");
       expect(returnResolverFactory).to.have.property("createConstantResolver");
       expect(returnResolverFactory).to.have.property("createRegistryKeyResolver");
@@ -78,6 +79,26 @@ describe("Registry", function () {
     context("when there is no record", function () {
       it("should return resolver", async function () {
         const returnResolver = registry.bind("Date").toAlias(Date);
+        expect(returnResolver).to.be.an.instanceOf(BaseResolver);
+      });
+    });
+  });
+
+  describe("#bind(key).toCallable(callable)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        registry.setResolverByKey(Date, instanceResolver);
+      });
+      it("should return resolver", async function () {
+        const argCallable: Callable = [Date, "getNow"];
+        const returnResolver = registry.bind("Date").toCallable(argCallable);
+        expect(returnResolver).to.be.an.instanceOf(BaseResolver);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return resolver", async function () {
+        const argCallable: Callable = [Date, "getNow"];
+        const returnResolver = registry.bind("Date").toCallable(argCallable);
         expect(returnResolver).to.be.an.instanceOf(BaseResolver);
       });
     });
@@ -149,14 +170,14 @@ describe("Registry", function () {
         registry.setResolverByKey("key", instanceResolver);
       });
       it("should return resolver", async function () {
-        const returnSelf = registry.getResolverByKey("key");
-        expect(returnSelf).to.not.be.undefined;
+        const returnResolver = registry.getResolverByKey("key");
+        expect(returnResolver).to.not.be.undefined;
       });
     });
     context("when there is no record", function () {
       it("should return undefined", async function () {
-        const returnSelf = registry.getResolverByKey("key");
-        expect(returnSelf).to.be.undefined;
+        const returnResolver = registry.getResolverByKey("key");
+        expect(returnResolver).to.be.undefined;
       });
     });
   });
@@ -169,15 +190,39 @@ describe("Registry", function () {
         when(mockResolver.scope).thenReturn("transient");
         when(mockResolver.resolve<Date>(instanceScope)).thenReturn(new Date());
       });
-      it("should resolve resolver", async function () {
-        const returnSelf = registry.resolve<Date>("key", instanceScope);
-        expect(returnSelf).to.be.an.instanceOf(Date);
+      it("should return instance", async function () {
+        const returnInstance = registry.resolve<Date>("key", instanceScope);
+        expect(returnInstance).to.be.an.instanceOf(Date);
       });
     });
     context("when there is no record", function () {
       it("should throw error", async function () {
         const run = (): unknown => registry.resolve<Date>("key", instanceScope);
         expect(run).to.throw(ContainerError);
+      });
+    });
+    context("when resolvable is callable", function () {
+      beforeEach(async function () {
+        registry.setResolverByKey("Date", instanceResolver);
+
+        when(mockResolver.scope).thenReturn("transient");
+        when(mockResolver.resolve<Date>(instanceScope)).thenReturn(new Date());
+      });
+      it("should return result", async function () {
+        const returnResult = registry.resolve(["Date", "getTime"], instanceScope);
+        expect(returnResult).to.be.a("number");
+      });
+    });
+    context("when resolvable is callable string", function () {
+      beforeEach(async function () {
+        registry.setResolverByKey("Date", instanceResolver);
+
+        when(mockResolver.scope).thenReturn("transient");
+        when(mockResolver.resolve<Date>(instanceScope)).thenReturn(new Date());
+      });
+      it("should return result", async function () {
+        const returnResult = registry.resolve("Date#getTime", instanceScope);
+        expect(returnResult).to.be.a("number");
       });
     });
   });
