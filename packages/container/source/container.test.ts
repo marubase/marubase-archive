@@ -30,6 +30,7 @@ describe("Container", function () {
       const returnFluentApi = container.bind("test");
       expect(returnFluentApi).to.have.property("to");
       expect(returnFluentApi).to.have.property("toAlias");
+      expect(returnFluentApi).to.have.property("toCallable");
       expect(returnFluentApi).to.have.property("toConstant");
       expect(returnFluentApi).to.have.property("toSelf");
     });
