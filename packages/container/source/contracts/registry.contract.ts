@@ -27,13 +27,15 @@ export interface RegistryContract {
 }
 
 export type RegistryBindTo = {
-  to(constructor: Function): ResolverContract;
+  to(targetClass: Function): ResolverContract;
 
-  toAlias(alias: RegistryKey): ResolverContract;
+  toAlias(targetKey: RegistryKey): ResolverContract;
 
   toCallable(callable: Callable): ResolverContract;
 
   toConstant(constant: unknown): ResolverContract;
+
+  toFunction(targetFn: Function): ResolverContract;
 
   toSelf(): ResolverContract;
 };
