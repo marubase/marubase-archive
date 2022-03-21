@@ -6,7 +6,7 @@ import {
 import { RequestContract, RequestMethod } from "./request.contract.js";
 import { ResponseCode, ResponseContract } from "./response.contract.js";
 
-export interface ContextContract {
+export interface ContextContract extends Map<unknown, unknown> {
   readonly container: ContainerContract;
 
   readonly credential?: [string, string] | string;
