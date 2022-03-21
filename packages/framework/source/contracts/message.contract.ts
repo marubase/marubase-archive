@@ -4,7 +4,7 @@ import { MultipartContract } from "./multipart.contract.js";
 export interface MessageContract {
   readonly body: Readable;
 
-  readonly headerMap: Map<string, string>;
+  readonly headers: Record<string, string>;
 
   clearBody(): this;
 
