@@ -8,6 +8,10 @@ import {
   ResolverContract,
 } from "../contracts/resolver.contract.js";
 import { ScopeContract } from "../contracts/scope.contract.js";
+import { getDependencies } from "../functions/get-dependencies.js";
+import { getScope } from "../functions/get-scope.js";
+import { getTags } from "../functions/get-tags.js";
+import { isInjectable } from "../functions/is-injectable.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class CallableResolver extends BaseResolver implements ResolverContract {
@@ -22,6 +26,17 @@ export class CallableResolver extends BaseResolver implements ResolverContract {
     const [targetKey, targetMethod] = this._callable;
     const target = this._registry.resolve(targetKey, scope);
     const targetInstance = target as ResolvableInstance<Result>;
+    if (isInjectable(targetInstance, targetMethod)) {
+      const dependencies = getDependencies(targetInstance, targetMethod);
+      this.setDependencies(...dependencies);
+
+      const scope = getScope(targetInstance, targetMethod);
+      this.setScope(scope);
+
+      const tags = getTags(targetInstance, targetMethod);
+      this.setRegistryTags(...tags);
+    }
+
     const targetArgs = this._resolveDependencies(scope).concat(...args);
     return targetInstance[targetMethod](...targetArgs);
   }
