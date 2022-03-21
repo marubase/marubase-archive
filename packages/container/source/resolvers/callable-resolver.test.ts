@@ -4,6 +4,7 @@ import { RegistryContract } from "../contracts/registry.contract.js";
 import { Callable } from "../contracts/resolver.contract.js";
 import { ScopeContract } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
+import { setInjectable } from "../functions/set-injectable.js";
 import { CallableResolver } from "./callable-resolver.js";
 
 describe("CallableResolver", function () {
@@ -44,6 +45,25 @@ describe("CallableResolver", function () {
       it("should throw error", async function () {
         const run = (): unknown => resolver.resolve(instanceScope);
         expect(run).to.throw(ContainerError);
+      });
+    });
+    context("when callable is injectable", function () {
+      let resolver: CallableResolver;
+      beforeEach(async function () {
+        const argCallable: Callable = [Date, "getTime"];
+        setInjectable(true, Date.prototype, "getTime");
+
+        resolver = new CallableResolver(instanceRegistry, argCallable);
+        resolver.setDependencies(Date);
+
+        when(mockRegistry.resolve<Date>(Date, instanceScope)).thenReturn(new Date());
+      });
+      afterEach(async function () {
+        setInjectable(false, Date.prototype, "getTime");
+      });
+      it("should return result", async function () {
+        const returnResult = resolver.resolve(instanceScope);
+        expect(returnResult).to.be.a("number");
       });
     });
   });
