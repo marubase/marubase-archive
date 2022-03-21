@@ -30,6 +30,7 @@ module.exports = {
   resolve: {
     fallback: {
       buffer: require.resolve("buffer"),
+      events: require.resolve("events/"),
       process: require.resolve("process/browser"),
       stream: require.resolve("readable-stream"),
       util: require.resolve("util"),
