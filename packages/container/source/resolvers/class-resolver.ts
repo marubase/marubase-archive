@@ -7,6 +7,10 @@ import {
   ResolverContract,
 } from "../contracts/resolver.contract.js";
 import { ScopeContract } from "../contracts/scope.contract.js";
+import { getDependencies } from "../functions/get-dependencies.js";
+import { getScope } from "../functions/get-scope.js";
+import { getTags } from "../functions/get-tags.js";
+import { isInjectable } from "../functions/is-injectable.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class ClassResolver extends BaseResolver implements ResolverContract {
@@ -15,6 +19,17 @@ export class ClassResolver extends BaseResolver implements ResolverContract {
   public constructor(registry: RegistryContract, targetClass: Function) {
     super(registry);
     this._targetClass = targetClass;
+
+    if (isInjectable(this._targetClass)) {
+      const dependencies = getDependencies(this._targetClass);
+      this.setDependencies(...dependencies);
+
+      const scope = getScope(this._targetClass);
+      this.setScope(scope);
+
+      const tags = getTags(this._targetClass);
+      this.setRegistryTags(...tags);
+    }
   }
 
   public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
