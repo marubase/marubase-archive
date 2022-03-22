@@ -27,6 +27,8 @@ export interface MessageContract {
   toData(): Promise<MessageData>;
 
   toMultipart(): AsyncIterable<MessageContract>;
+
+  toStream(): Readable;
 }
 
 export type MessageBuffer = ArrayBuffer | NodeJS.TypedArray;
