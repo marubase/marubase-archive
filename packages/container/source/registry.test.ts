@@ -20,6 +20,17 @@ describe("Registry", function () {
     registry = new Registry();
   });
 
+  describe("get factory", function () {
+    it("should return resolver factory", async function () {
+      const returnResolverFactory = registry.factory;
+      expect(returnResolverFactory).to.have.property("createCallableResolver");
+      expect(returnResolverFactory).to.have.property("createClassResolver");
+      expect(returnResolverFactory).to.have.property("createConstantResolver");
+      expect(returnResolverFactory).to.have.property("createFunctionResolver");
+      expect(returnResolverFactory).to.have.property("createRegistryKeyResolver");
+    });
+  });
+
   describe("get keyMap", function () {
     context("when there is record", function () {
       beforeEach(async function () {
@@ -35,17 +46,6 @@ describe("Registry", function () {
         const returnKeyMap = registry.keyMap;
         expect(returnKeyMap).to.be.an.instanceOf(Map);
       });
-    });
-  });
-
-  describe("get resolverFactory", function () {
-    it("should return resolver factory", async function () {
-      const returnResolverFactory = registry.resolverFactory;
-      expect(returnResolverFactory).to.have.property("createCallableResolver");
-      expect(returnResolverFactory).to.have.property("createClassResolver");
-      expect(returnResolverFactory).to.have.property("createConstantResolver");
-      expect(returnResolverFactory).to.have.property("createFunctionResolver");
-      expect(returnResolverFactory).to.have.property("createRegistryKeyResolver");
     });
   });
 
