@@ -1,4 +1,4 @@
-import "./is-multipart-contract.test.js";
+import "./is-multipart.test.js";
 import "./is-readable.test.js";
 import "./to-buffer-readable.test.js";
 import "./to-buffer.test.js";

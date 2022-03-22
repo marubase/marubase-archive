@@ -1,8 +1,8 @@
 import { MultipartContract } from "../contracts/multipart.contract.js";
 
-export function isMultipartContract(
+export function isMultipart<Multipart extends MultipartContract>(
   input: unknown,
-): input is MultipartContract {
+): input is Multipart {
   return (
     typeof input === "object" &&
     input !== null &&

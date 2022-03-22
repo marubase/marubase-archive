@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { MessageContract } from "../contracts/message.contract.js";
 import { MultipartContract } from "../contracts/multipart.contract.js";
-import { isMultipartContract } from "./is-multipart-contract.js";
+import { isMultipart } from "./is-multipart.js";
 import { toBufferReadable } from "./to-buffer-readable.js";
 
-describe("isMultipartContract(input)", function () {
-  context("when input is multipart contract", function () {
+describe("isMultipart(input)", function () {
+  context("when input is multipart", function () {
     it("should return true", async function () {
       const input: MultipartContract = {
         boundary: "boundary",
@@ -31,13 +31,13 @@ describe("isMultipartContract(input)", function () {
           return toBufferReadable("");
         },
       };
-      expect(isMultipartContract(input)).to.be.true;
+      expect(isMultipart(input)).to.be.true;
     });
   });
-  context("when input is not multipart contract", function () {
+  context("when input is not multipart", function () {
     it("should return false", async function () {
       const input = null;
-      expect(isMultipartContract(input)).to.be.false;
+      expect(isMultipart(input)).to.be.false;
     });
   });
 });
