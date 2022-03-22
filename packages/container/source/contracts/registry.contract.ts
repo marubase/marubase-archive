@@ -7,9 +7,9 @@ import {
 import { ScopeContract } from "./scope.contract.js";
 
 export interface RegistryContract {
-  readonly keyMap: Map<RegistryKey, ResolverContract>;
+  readonly factory: ResolverFactory;
 
-  readonly resolverFactory: ResolverFactory;
+  readonly keyMap: Map<RegistryKey, ResolverContract>;
 
   readonly tagMap: Map<RegistryTag, Set<ResolverContract>>;
 
