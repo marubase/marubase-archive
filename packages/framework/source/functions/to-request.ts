@@ -1,8 +1,8 @@
 import { Readable } from "stream";
 import { MAX_HEADER_SIZE } from "./to-message.js";
-import { Request } from "./to-request-readable.js";
+import { RawRequest } from "./to-request-readable.js";
 
-export async function toRequest(readable: Readable): Promise<Request> {
+export async function toRequest(readable: Readable): Promise<RawRequest> {
   const headers = new Map<string, string>();
   const reader = readable[Symbol.asyncIterator]();
 
