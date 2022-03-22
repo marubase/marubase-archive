@@ -296,6 +296,13 @@ describe("Registry", function () {
     });
   });
 
+  describe("#fork()", function () {
+    it("should return fork", async function () {
+      const returnFork = registry.fork();
+      expect(returnFork).to.be.an.instanceOf(Registry);
+    });
+  });
+
   describe("#resolve(resolvable, scope, ...args)", function () {
     context("when there is record", function () {
       beforeEach(async function () {
