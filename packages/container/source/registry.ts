@@ -19,13 +19,19 @@ import { RegistryKeyResolver } from "./resolvers/registry-key-resolver.js";
 import { RegistryTagResolver } from "./resolvers/registry-tag-resolver.js";
 
 export class Registry implements RegistryContract {
-  protected _keyMap = new Map<RegistryKey, ResolverContract>();
+  protected _keyMap: Map<RegistryKey, ResolverContract>;
 
   protected _resolverFactory: ResolverFactory;
 
-  protected _tagMap = new Map<RegistryTag, Set<ResolverContract>>();
+  protected _tagMap: Map<RegistryTag, Set<ResolverContract>>;
 
-  public constructor(resolverFactory = DefaultResolverFactory) {
+  public constructor(
+    keyMap: Map<RegistryKey, ResolverContract> = new Map(),
+    tagMap: Map<RegistryTag, Set<ResolverContract>> = new Map(),
+    resolverFactory = DefaultResolverFactory,
+  ) {
+    this._keyMap = keyMap;
+    this._tagMap = tagMap;
     this._resolverFactory = resolverFactory;
   }
 
@@ -104,6 +110,15 @@ export class Registry implements RegistryContract {
       if (resolverSet.size < 1) this._tagMap.delete(tag);
     }
     return this;
+  }
+
+  public fork(): this {
+    const Static = this.constructor as typeof Registry;
+    return new Static(
+      this._keyMap,
+      this._tagMap,
+      this._resolverFactory,
+    ) as this;
   }
 
   public getResolverByKey(key: RegistryKey): ResolverContract | undefined {
