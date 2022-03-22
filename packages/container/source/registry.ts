@@ -112,7 +112,11 @@ export class Registry implements RegistryContract {
 
   public fork(): this {
     const Static = this.constructor as typeof Registry;
-    return new Static(this._keyMap, this._tagMap, this._factory) as this;
+    const forkKeyMap = new Map(this._keyMap);
+    const forkTagMap = new Map();
+    for (const [tag, tagSet] of this._tagMap)
+      forkTagMap.set(tag, new Set(tagSet));
+    return new Static(forkKeyMap, forkTagMap, this._factory) as this;
   }
 
   public getResolverByKey(key: RegistryKey): ResolverContract | undefined {
