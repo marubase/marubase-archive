@@ -7,7 +7,7 @@ class MultipartReadable extends Readable {
 
   protected _reader?: AsyncIterator<Buffer>;
 
-  public constructor(input: Multipart, options?: ReadableOptions) {
+  public constructor(input: RawMultipart, options?: ReadableOptions) {
     super(Object.assign({}, options));
     this._boundary = input.boundary;
     this._iterator = input.parts[Symbol.iterator]();
@@ -41,13 +41,13 @@ class MultipartReadable extends Readable {
 }
 
 export function toMultipartReadable(
-  input: Multipart,
+  input: RawMultipart,
   options?: ReadableOptions,
 ): Readable {
   return new MultipartReadable(input, options);
 }
 
-export type Multipart = {
+export type RawMultipart = {
   boundary: string;
   parts: Readable[];
 };
