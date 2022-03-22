@@ -257,6 +257,25 @@ describe("Registry", function () {
     });
   });
 
+  describe("#fork()", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        registry.setResolverByKey("key", instanceResolver);
+        registry.setResolverByTags(new Set(["tag"]), instanceResolver);
+      });
+      it("should return fork", async function () {
+        const returnFork = registry.fork();
+        expect(returnFork).to.be.an.instanceOf(Registry);
+      });
+    });
+    context("when there is no record", function () {
+      it("should return fork", async function () {
+        const returnFork = registry.fork();
+        expect(returnFork).to.be.an.instanceOf(Registry);
+      });
+    });
+  });
+
   describe("#getResolverByKey(key)", function () {
     context("when there is record", function () {
       beforeEach(async function () {
@@ -293,13 +312,6 @@ describe("Registry", function () {
         expect(returnResolvers).to.be.an("array");
         expect(returnResolvers).to.have.lengthOf(0);
       });
-    });
-  });
-
-  describe("#fork()", function () {
-    it("should return fork", async function () {
-      const returnFork = registry.fork();
-      expect(returnFork).to.be.an.instanceOf(Registry);
     });
   });
 
