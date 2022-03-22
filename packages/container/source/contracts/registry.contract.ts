@@ -22,6 +22,8 @@ export interface RegistryContract {
     resolver: ResolverContract,
   ): this;
 
+  fork(): this;
+
   getResolverByKey(key: RegistryKey): ResolverContract | undefined;
 
   getResolverByTag(tag: RegistryTag): ResolverContract[];
