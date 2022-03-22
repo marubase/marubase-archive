@@ -110,9 +110,6 @@ importers:
     dependencies:
       '@marubase/container': link:../container
 
-  packages/helper-stream:
-    specifiers: {}
-
   tools/eslint-plugin:
     specifiers: {}
 
