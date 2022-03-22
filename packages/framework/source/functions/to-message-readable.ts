@@ -1,11 +1,11 @@
 import { Readable, ReadableOptions } from "stream";
 
 class MessageReadable extends Readable {
-  protected _message: Message;
+  protected _message: RawMessage;
 
   protected _reader?: AsyncIterator<Buffer>;
 
-  public constructor(input: Message, options?: ReadableOptions) {
+  public constructor(input: RawMessage, options?: ReadableOptions) {
     super(Object.assign({}, options));
     this._message = input;
   }
@@ -32,13 +32,13 @@ class MessageReadable extends Readable {
 }
 
 export function toMessageReadable(
-  input: Message,
+  input: RawMessage,
   options?: ReadableOptions,
 ): Readable {
   return new MessageReadable(input, options);
 }
 
-export type Message = {
+export type RawMessage = {
   body: Readable;
   headers: Map<string, string>;
 };
