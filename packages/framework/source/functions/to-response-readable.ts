@@ -3,12 +3,9 @@ import { Readable, ReadableOptions } from "stream";
 class ResponseReadable extends Readable {
   protected _reader?: AsyncIterator<Buffer>;
 
-  protected _response: Response;
+  protected _response: RawResponse;
 
-  public constructor(
-    input: Omit<Response, "protocol" | "statusCode" | "statusText">,
-    options?: ReadableOptions,
-  ) {
+  public constructor(input: RawResponseInput, options?: ReadableOptions) {
     super(Object.assign({}, options));
 
     const DEFAULT_RESPONSE = {
@@ -46,16 +43,18 @@ class ResponseReadable extends Readable {
 }
 
 export function toResponseReadable(
-  input: Omit<Response, "protocol" | "statusCode" | "statusText">,
+  input: RawResponseInput,
   options?: ReadableOptions,
 ): Readable {
   return new ResponseReadable(input, options);
 }
 
-export type Response = {
+export type RawResponse = Required<RawResponseInput>;
+
+export type RawResponseInput = {
   body: Readable;
   headers: Map<string, string>;
-  protocol: string;
-  statusCode: string;
-  statusText: string;
+  protocol?: string;
+  statusCode?: string;
+  statusText?: string;
 };
