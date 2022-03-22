@@ -3,12 +3,9 @@ import { Readable, ReadableOptions } from "stream";
 class RequestReadable extends Readable {
   protected _reader?: AsyncIterator<Buffer>;
 
-  protected _request: Request;
+  protected _request: RawRequest;
 
-  public constructor(
-    input: Omit<Request, "method" | "path" | "protocol">,
-    options?: ReadableOptions,
-  ) {
+  public constructor(input: RawRequestInput, options?: ReadableOptions) {
     super(Object.assign({}, options));
 
     const DEFAULT_REQUEST = { method: "GET", path: "/", protocol: "HTTP/1.1" };
@@ -42,16 +39,18 @@ class RequestReadable extends Readable {
 }
 
 export function toRequestReadable(
-  input: Omit<Request, "method" | "path" | "protocol">,
+  input: RawRequestInput,
   options?: ReadableOptions,
 ): Readable {
   return new RequestReadable(input, options);
 }
 
-export type Request = {
+export type RawRequest = Required<RawRequestInput>;
+
+export type RawRequestInput = {
   body: Readable;
   headers: Map<string, string>;
-  method: string;
-  path: string;
-  protocol: string;
+  method?: string;
+  path?: string;
+  protocol?: string;
 };
