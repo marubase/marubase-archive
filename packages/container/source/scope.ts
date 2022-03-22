@@ -10,13 +10,13 @@ export class Scope implements ScopeContract {
   protected _singleton: CacheContract;
 
   public constructor(
-    singleton?: CacheContract,
-    container?: CacheContract,
-    request?: CacheContract,
+    singleton: CacheContract = new Cache(),
+    container: CacheContract = new Cache(),
+    request: CacheContract = new Cache(),
   ) {
-    this._singleton = singleton || new Cache();
-    this._container = container || new Cache();
-    this._request = request || new Cache();
+    this._singleton = singleton;
+    this._container = container;
+    this._request = request;
   }
 
   public get container(): CacheContract {
