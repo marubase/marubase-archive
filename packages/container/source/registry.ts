@@ -19,28 +19,28 @@ import { RegistryKeyResolver } from "./resolvers/registry-key-resolver.js";
 import { RegistryTagResolver } from "./resolvers/registry-tag-resolver.js";
 
 export class Registry implements RegistryContract {
-  protected _keyMap: Map<RegistryKey, ResolverContract>;
+  protected _factory: ResolverFactory;
 
-  protected _resolverFactory: ResolverFactory;
+  protected _keyMap: Map<RegistryKey, ResolverContract>;
 
   protected _tagMap: Map<RegistryTag, Set<ResolverContract>>;
 
   public constructor(
     keyMap: Map<RegistryKey, ResolverContract> = new Map(),
     tagMap: Map<RegistryTag, Set<ResolverContract>> = new Map(),
-    resolverFactory = DefaultResolverFactory,
+    factory = DefaultResolverFactory,
   ) {
     this._keyMap = keyMap;
     this._tagMap = tagMap;
-    this._resolverFactory = resolverFactory;
+    this._factory = factory;
+  }
+
+  public get factory(): ResolverFactory {
+    return this._factory;
   }
 
   public get keyMap(): Map<RegistryKey, ResolverContract> {
     return this._keyMap;
-  }
-
-  public get resolverFactory(): ResolverFactory {
-    return this._resolverFactory;
   }
 
   public get tagMap(): Map<RegistryTag, Set<ResolverContract>> {
@@ -50,27 +50,27 @@ export class Registry implements RegistryContract {
   public bind(key: RegistryKey): RegistryBindTo {
     return {
       to: (targetClass) =>
-        this._resolverFactory
+        this._factory
           .createClassResolver(this, targetClass)
           .setRegistryKey(key),
 
       toAlias: (targetKey) =>
-        this._resolverFactory
+        this._factory
           .createRegistryKeyResolver(this, targetKey)
           .setRegistryKey(key),
 
       toCallable: (callable) =>
-        this._resolverFactory
+        this._factory
           .createCallableResolver(this, callable)
           .setRegistryKey(key),
 
       toConstant: (constant) =>
-        this._resolverFactory
+        this._factory
           .createConstantResolver(this, constant)
           .setRegistryKey(key),
 
       toFunction: (targetFn) =>
-        this._resolverFactory
+        this._factory
           .createFunctionResolver(this, targetFn)
           .setRegistryKey(key),
 
@@ -81,13 +81,11 @@ export class Registry implements RegistryContract {
           const solution = `Please make sure key is a class before binding to itself.`;
           throw new ContainerError(`${context} ${problem} ${solution}`);
         }
-        return this._resolverFactory
-          .createClassResolver(this, key)
-          .setRegistryKey(key);
+        return this._factory.createClassResolver(this, key).setRegistryKey(key);
       },
 
       toTag: (targetTag) =>
-        this._resolverFactory
+        this._factory
           .createRegistryTagResolver(this, targetTag)
           .setRegistryKey(key),
     };
@@ -114,11 +112,7 @@ export class Registry implements RegistryContract {
 
   public fork(): this {
     const Static = this.constructor as typeof Registry;
-    return new Static(
-      this._keyMap,
-      this._tagMap,
-      this._resolverFactory,
-    ) as this;
+    return new Static(this._keyMap, this._tagMap, this._factory) as this;
   }
 
   public getResolverByKey(key: RegistryKey): ResolverContract | undefined {
@@ -141,10 +135,10 @@ export class Registry implements RegistryContract {
       if (match) resolvable = [match[1], match[2]];
     }
     return Array.isArray(resolvable)
-      ? this._resolverFactory
+      ? this._factory
           .createCallableResolver(this, resolvable)
           .resolve(scope, ...args)
-      : this._resolverFactory
+      : this._factory
           .createRegistryKeyResolver(this, resolvable)
           .resolve(scope, ...args);
   }
@@ -154,7 +148,7 @@ export class Registry implements RegistryContract {
     scope: ScopeContract,
     ...args: unknown[]
   ): Result[] {
-    return this._resolverFactory
+    return this._factory
       .createRegistryTagResolver(this, tag)
       .resolve(scope, ...args);
   }
