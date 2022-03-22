@@ -23,9 +23,12 @@ export class Container implements ContainerContract {
 
   protected _scope: ScopeContract;
 
-  public constructor(registry?: RegistryContract, scope?: ScopeContract) {
-    this._registry = registry || new Registry();
-    this._scope = scope || new Scope();
+  public constructor(
+    registry: RegistryContract = new Registry(),
+    scope: ScopeContract = new Scope(),
+  ) {
+    this._registry = registry;
+    this._scope = scope;
     this.bind("Container").toConstant(this);
   }
 
