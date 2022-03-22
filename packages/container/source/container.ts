@@ -61,8 +61,9 @@ export class Container implements ContainerContract {
 
   public fork(): this {
     const Static = this.constructor as typeof Container;
+    const forkRegistry = this._registry.fork();
     const containerScope = this._scope.fork("container");
-    return new Static(this._registry, containerScope) as this;
+    return new Static(forkRegistry, containerScope) as this;
   }
 
   public install(name: ProviderName, provider: Provider): this {
