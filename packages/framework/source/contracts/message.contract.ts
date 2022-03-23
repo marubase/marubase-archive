@@ -6,6 +6,8 @@ export interface MessageContract {
 
   readonly headers: Record<string, string>;
 
+  readonly protocol: MessageProtocol;
+
   clearBody(): this;
 
   clearHeader(key: string): this;
@@ -21,6 +23,8 @@ export interface MessageContract {
 
   setHeaders(headers: Map<string, string>): this;
   setHeaders(headers: [string, string][]): this;
+
+  setProtocol(protocol: MessageProtocol): this;
 
   toBuffer(): Promise<Buffer>;
 
@@ -40,3 +44,5 @@ export type MessageData =
   | number
   | string
   | undefined;
+
+export type MessageProtocol = "HTTP/1.0" | "HTTP/1.1" | "HTTP/2" | "HTTP/3";
