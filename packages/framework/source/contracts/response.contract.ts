@@ -1,13 +1,13 @@
 import { MessageContract } from "./message.contract.js";
 
 export interface ResponseContract extends MessageContract {
-  readonly code: ResponseCode;
+  readonly statusCode: ResponseCode;
 
-  readonly text: string;
+  readonly statusText: string;
 
-  setCode(code: ResponseCode): this;
+  setStatusCode(code: ResponseCode): this;
 
-  setText(text: string): this;
+  setStatusText(text: string): this;
 }
 
 export type ResponseCode = keyof typeof ResponseText;
