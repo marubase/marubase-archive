@@ -3,6 +3,7 @@ import {
   RegistryTag,
   Resolvable,
 } from "@marubase/container";
+import { MessageProtocol } from "./message.contract.js";
 import { RequestContract, RequestMethod } from "./request.contract.js";
 import { ResponseCode, ResponseContract } from "./response.contract.js";
 
@@ -24,6 +25,8 @@ export interface ContextContract extends Map<unknown, unknown> {
   readonly path: string;
 
   readonly port: number;
+
+  readonly protocol: MessageProtocol;
 
   readonly queries: Record<string, string>;
 
