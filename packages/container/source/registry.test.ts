@@ -203,6 +203,14 @@ describe("Registry", function () {
     });
   });
 
+  describe("#call(targetFn, scope, ...args)", function () {
+    it("should return result", async function () {
+      const testFn = (): Date => new Date();
+      const returnResult = registry.call(testFn, instanceScope);
+      expect(returnResult).to.be.an.instanceOf(Date);
+    });
+  });
+
   describe("#clearResolverByKey(key)", function () {
     context("when there is record", function () {
       beforeEach(async function () {
@@ -254,6 +262,13 @@ describe("Registry", function () {
         const returnSelf = registry.clearResolverByTags(argTagSet, instanceResolver);
         expect(returnSelf).to.equal(registry);
       });
+    });
+  });
+
+  describe("#create(targetFn, scope, ...args)", function () {
+    it("should return result", async function () {
+      const returnResult = registry.create(Date, instanceScope);
+      expect(returnResult).to.be.an.instanceOf(Date);
     });
   });
 
