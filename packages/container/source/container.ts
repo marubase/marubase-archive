@@ -62,6 +62,16 @@ export class Container implements ContainerContract {
     this._booted = true;
   }
 
+  public call<Result>(targetFn: Function, ...args: unknown[]): Result {
+    const requestScope = this._scope.fork("request");
+    return this._registry.call(targetFn, requestScope, ...args);
+  }
+
+  public create<Result>(targetClass: Function, ...args: unknown[]): Result {
+    const requestScope = this._scope.fork("request");
+    return this._registry.create(targetClass, requestScope, ...args);
+  }
+
   public fork(): this {
     const Static = this.constructor as typeof Container;
     const forkRegistry = this._registry.fork();
