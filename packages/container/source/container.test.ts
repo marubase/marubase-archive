@@ -116,6 +116,21 @@ describe("Container", function () {
     });
   });
 
+  describe("#call(targetFn, ...args)", function () {
+    it("should return result", async function () {
+      const testFn = (): Date => new Date();
+      const returnResult = container.call(testFn);
+      expect(returnResult).to.be.an.instanceOf(Date);
+    });
+  });
+
+  describe("#create(targetFn, scope, ...args)", function () {
+    it("should return result", async function () {
+      const returnResult = container.create(Date);
+      expect(returnResult).to.be.an.instanceOf(Date);
+    });
+  });
+
   describe("#fork()", function () {
     it("should return fork", async function () {
       const returnFork = container.fork();
