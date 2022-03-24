@@ -91,6 +91,16 @@ export class Registry implements RegistryContract {
     };
   }
 
+  public call<Result>(
+    targetFn: Function,
+    scope: ScopeContract,
+    ...args: unknown[]
+  ): Result {
+    return this._factory
+      .createFunctionResolver(this, targetFn)
+      .resolve(scope, ...args);
+  }
+
   public clearResolverByKey(key: RegistryKey): this {
     this._keyMap.delete(key);
     return this;
@@ -108,6 +118,16 @@ export class Registry implements RegistryContract {
       if (resolverSet.size < 1) this._tagMap.delete(tag);
     }
     return this;
+  }
+
+  public create<Result>(
+    targetClass: Function,
+    scope: ScopeContract,
+    ...args: unknown[]
+  ): Result {
+    return this._factory
+      .createClassResolver(this, targetClass)
+      .resolve(scope, ...args);
   }
 
   public fork(): this {
