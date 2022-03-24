@@ -20,6 +20,10 @@ export interface ContainerContract {
 
   boot(): Promise<void>;
 
+  call<Result>(targetFn: Function, ...args: unknown[]): Result;
+
+  create<Result>(targetClass: Function, ...args: unknown[]): Result;
+
   fork(): this;
 
   install(name: ProviderName, provider: Provider): this;
