@@ -15,12 +15,24 @@ export interface RegistryContract {
 
   bind(key: RegistryKey): RegistryBindTo;
 
+  call<Result>(
+    targetFn: Function,
+    scope: ScopeContract,
+    ...args: unknown[]
+  ): Result;
+
   clearResolverByKey(key: RegistryKey): this;
 
   clearResolverByTags(
     tagSet: Set<RegistryTag>,
     resolver: ResolverContract,
   ): this;
+
+  create<Result>(
+    targetClass: Function,
+    scope: ScopeContract,
+    ...args: unknown[]
+  ): Result;
 
   fork(): this;
 
