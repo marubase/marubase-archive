@@ -20,7 +20,7 @@ class MessageReadable extends Readable {
       const { body, headers } = this._message;
       this._reader = body[Symbol.asyncIterator]();
 
-      for (const [key, value] of [...headers.entries()].sort()) {
+      for (const [key, value] of headers.entries()) {
         const rawHeader = `${key}: ${value}\r\n`;
         this.push(rawHeader);
       }
