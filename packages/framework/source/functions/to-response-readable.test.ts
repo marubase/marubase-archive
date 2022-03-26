@@ -18,8 +18,8 @@ describe("toResponseReadable(input)", function () {
       expect(isReadable(readable)).to.be.true;
 
       let rawContent = "HTTP/1.1 200 OK\r\n";
-      rawContent += `Content-Length: 14\r\n`;
       rawContent += `Content-Type: application/json\r\n`;
+      rawContent += `Content-Length: 14\r\n`;
       rawContent += `\r\n`;
       rawContent += `{"test":true}`;
 
