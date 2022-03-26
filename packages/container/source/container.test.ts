@@ -199,6 +199,17 @@ describe("Container", function () {
         expect(returnSelf).to.equal(container);
       });
     });
+    context("when container name already exists", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = {};
+        container.install("provider", argProvider);
+      });
+      it("should throw error", async function () {
+        const argProvider: Provider = {};
+        const run = (): unknown => container.install("provider", argProvider);
+        expect(run).to.throw(ContainerError);
+      });
+    });
   });
 
   describe("#installed(name)", function () {
@@ -361,22 +372,23 @@ describe("Container", function () {
         expect(returnSelf).to.equal(container);
       });
     });
-    context("when container is booted and no provider installed", function () {
+    context("when container is not booted and provider is installed", function () {
       beforeEach(async function () {
-        await container.boot();
+        const argProvider: Provider = {};
+        container.install("provider", argProvider);
       });
       it("should return self", async function () {
         const returnSelf = container.uninstall("provider");
         expect(returnSelf).to.equal(container);
       });
     });
-    context("when container is not booted", function () {
+    context("when container is booted and no provider installed", function () {
       beforeEach(async function () {
         await container.boot();
       });
-      it("should return self", async function () {
-        const returnSelf = container.uninstall("provider");
-        expect(returnSelf).to.equal(container);
+      it("should throw error", async function () {
+        const run = (): unknown => container.uninstall("provider");
+        expect(run).to.throw(ContainerError);
       });
     });
   });
