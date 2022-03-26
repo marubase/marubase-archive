@@ -31,7 +31,7 @@ class ResponseReadable extends Readable {
       this.push(responseLine);
 
       const { headers } = this._response;
-      for (const [key, value] of [...headers.entries()].sort()) {
+      for (const [key, value] of headers.entries()) {
         const rawHeader = `${key}: ${value}\r\n`;
         this.push(rawHeader);
       }
