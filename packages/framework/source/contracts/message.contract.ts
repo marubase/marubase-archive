@@ -30,9 +30,11 @@ export interface MessageContract {
 
   toData(): Promise<MessageData>;
 
-  toMultipart(): AsyncIterable<MessageContract>;
+  toMultipart(): MultipartContract;
 
   toStream(): Readable;
+
+  toText(): Promise<string>;
 }
 
 export type MessageBuffer = ArrayBuffer | NodeJS.TypedArray;
