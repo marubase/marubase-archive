@@ -11,6 +11,7 @@ import {
 } from "./contracts/registry.contract.js";
 import { ResolverContract } from "./contracts/resolver.contract.js";
 import { ScopeContract } from "./contracts/scope.contract.js";
+import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
 import { Scope } from "./scope.js";
 
@@ -80,6 +81,15 @@ export class Container implements ContainerContract {
   }
 
   public install(name: ProviderName, provider: Provider): this {
+    if (this._providerMap.has(name)) {
+      const nameText = typeof name === "symbol" ? name.toString() : name;
+
+      const context = `Installing provider '${nameText}'.`;
+      const problem = `Provider name already exists.`;
+      const solution = `Please install on another name or uninstall existing provider.`;
+      throw new ContainerError(`${context} ${problem} ${solution}`);
+    }
+
     if (provider.install) provider.install(this);
     if (this._booted && provider.boot) provider.boot(this);
     this._providerMap.set(name, provider);
@@ -115,6 +125,15 @@ export class Container implements ContainerContract {
   }
 
   public uninstall(name: ProviderName): this {
+    if (!this._providerMap.has(name)) {
+      const nameText = typeof name === "symbol" ? name.toString() : name;
+
+      const context = `Uninstalling provider '${nameText}'.`;
+      const problem = `Provider name does not exists.`;
+      const solution = `Please uninstall another name or install provider on the name.`;
+      throw new ContainerError(`${context} ${problem} ${solution}`);
+    }
+
     const provider = this._providerMap.get(name);
     if (typeof provider === "undefined") return this;
 
