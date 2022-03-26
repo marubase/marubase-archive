@@ -9,9 +9,9 @@ describe("toRequestReadable(input)", function () {
   context("when input is request", function () {
     it("should return readable stream", async function () {
       const headers = new Map([
+        ["Host", "127.0.0.1"],
         ["Content-Type", "application/json"],
         ["Content-Length", "14"],
-        ["Host", "127.0.0.1"],
       ]);
       const body = toBufferReadable(JSON.stringify({ test: true }));
 
@@ -19,9 +19,9 @@ describe("toRequestReadable(input)", function () {
       expect(isReadable(readable)).to.be.true;
 
       let rawContent = "GET / HTTP/1.1\r\n";
-      rawContent += `Content-Length: 14\r\n`;
-      rawContent += `Content-Type: application/json\r\n`;
       rawContent += `Host: 127.0.0.1\r\n`;
+      rawContent += `Content-Type: application/json\r\n`;
+      rawContent += `Content-Length: 14\r\n`;
       rawContent += `\r\n`;
       rawContent += `{"test":true}`;
 
