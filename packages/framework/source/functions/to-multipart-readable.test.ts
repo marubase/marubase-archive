@@ -43,18 +43,18 @@ describe("toMultipartReadable(input)", function () {
 
       let rawContent = ``;
       rawContent += `--${boundary}\r\n`;
-      rawContent += `Content-Length: 14\r\n`;
       rawContent += `Content-Type: application/json\r\n`;
+      rawContent += `Content-Length: 14\r\n`;
       rawContent += `\r\n`;
       rawContent += `{"test":true}\r\n`;
       rawContent += `--${boundary}\r\n`;
-      rawContent += `Content-Length: 14\r\n`;
       rawContent += `Content-Type: application/json\r\n`;
+      rawContent += `Content-Length: 14\r\n`;
       rawContent += `\r\n`;
       rawContent += `{"test":true}\r\n`;
       rawContent += `--${boundary}\r\n`;
-      rawContent += `Content-Length: 14\r\n`;
       rawContent += `Content-Type: application/json\r\n`;
+      rawContent += `Content-Length: 14\r\n`;
       rawContent += `\r\n`;
       rawContent += `{"test":true}\r\n`;
       rawContent += `--${boundary}--`;
