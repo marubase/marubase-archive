@@ -27,7 +27,7 @@ class RequestReadable extends Readable {
       this.push(requestLine);
 
       const { headers } = this._request;
-      for (const [key, value] of [...headers.entries()].sort()) {
+      for (const [key, value] of headers.entries()) {
         const rawHeader = `${key}: ${value}\r\n`;
         this.push(rawHeader);
       }
