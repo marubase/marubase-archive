@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 
-export async function toTextData(
+export async function toText(
   readable: Readable,
   encoding: BufferEncoding = "utf8",
 ): Promise<string> {
