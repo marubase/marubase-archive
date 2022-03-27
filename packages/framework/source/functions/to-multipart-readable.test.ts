@@ -4,7 +4,7 @@ import { isReadable } from "./is-readable.js";
 import { toBufferReadable } from "./to-buffer-readable.js";
 import { toMessageReadable } from "./to-message-readable.js";
 import { toMultipartReadable } from "./to-multipart-readable.js";
-import { toTextData } from "./to-text-data.js";
+import { toText } from "./to-text.js";
 
 describe("toMultipartReadable(input)", function () {
   context("when input is multipart", function () {
@@ -59,7 +59,7 @@ describe("toMultipartReadable(input)", function () {
       rawContent += `{"test":true}\r\n`;
       rawContent += `--${boundary}--`;
 
-      const content = await toTextData(readable);
+      const content = await toText(readable);
       expect(content).to.equal(rawContent);
     });
   });
@@ -87,7 +87,7 @@ describe("toMultipartReadable(input)", function () {
       expect(isReadable(readable)).to.be.true;
 
       try {
-        await toTextData(readable);
+        await toText(readable);
       } catch (error) {} /* eslint-disable-line no-empty */
     });
   });
