@@ -26,7 +26,7 @@ describe("toResponse(readable)", function () {
 
       const { protocol, statusCode, statusText } = response;
       expect(protocol).to.equal("HTTP/1.1");
-      expect(statusCode).to.equal("200");
+      expect(statusCode).to.equal(200);
       expect(statusText).to.equal("Test");
 
       const data = await toJSON(body);
