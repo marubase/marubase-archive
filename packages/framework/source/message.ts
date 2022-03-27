@@ -215,8 +215,7 @@ export class Message implements MessageContract {
         return { data, content_type: contentType, length: buffer.length };
       } else {
         const json = buffer.toString("utf8");
-        const data = JSON.stringify(json);
-        return { data, content_type: contentType, length: buffer.length };
+        return JSON.parse(json);
       }
     }
     return this._body.data;
@@ -266,7 +265,10 @@ export class Message implements MessageContract {
   }
 
   public toStream(): Readable {
-    return toMessageReadable(this);
+    return toMessageReadable({
+      body: this.body,
+      headers: this.headers,
+    });
   }
 
   public async toText(): Promise<string> {
