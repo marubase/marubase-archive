@@ -34,6 +34,7 @@ export class Response extends Message implements ResponseContract {
 
   public setStatusCode(statusCode: ResponseCode): this {
     this._statusCode = statusCode;
+    this._statusText = ResponseText[statusCode];
     return this;
   }
 
@@ -43,6 +44,12 @@ export class Response extends Message implements ResponseContract {
   }
 
   public toStream(): Readable {
-    return toResponseReadable(this);
+    return toResponseReadable({
+      body: this.body,
+      headers: this.headers,
+      protocol: this.protocol,
+      statusCode: this.statusCode,
+      statusText: this.statusText,
+    });
   }
 }
