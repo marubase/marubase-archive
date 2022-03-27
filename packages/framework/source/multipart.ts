@@ -65,8 +65,7 @@ export class Multipart implements MultipartContract {
   }
 
   public setContentType(contentType: string): this {
-    const pattern = /^(multipart\/.+);\s*boundary="(.+)"$/;
-    const matches = contentType.match(pattern);
+    const matches = contentType.match(/^(multipart\/.+);\s*boundary="(.+)"$/);
     if (!matches) {
       const context = `Setting multipart content type.`;
       const problem = `Content type does not match multipart content type pattern.`;
@@ -81,7 +80,7 @@ export class Multipart implements MultipartContract {
   }
 
   public setMimeType(mimeType: string): this {
-    if (mimeType.startsWith("multipart/")) {
+    if (!mimeType.match(/^(multipart\/.+)$/)) {
       const context = `Setting multipart mime type.`;
       const problem = `Mime type does not starts with 'multipart/'.`;
       const solution = `Please make sure mime type starts with 'multipart/'.`;
