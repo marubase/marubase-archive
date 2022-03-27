@@ -4,7 +4,7 @@ import { MultipartContract } from "./multipart.contract.js";
 export interface MessageContract {
   readonly body: Readable;
 
-  readonly headers: Record<string, string>;
+  readonly headers: Map<string, string>;
 
   readonly protocol: MessageProtocol;
 
@@ -18,6 +18,7 @@ export interface MessageContract {
   setBody(data: MessageData): this;
   setBody(multipart: MultipartContract): this;
   setBody(stream: Readable): this;
+  setBody(text: string): this;
 
   setHeader(key: string, value: string): this;
 
@@ -37,14 +38,25 @@ export interface MessageContract {
   toText(): Promise<string>;
 }
 
+export type MessageAttachment = {
+  content_type: string;
+  data: string;
+  length: number;
+};
+
 export type MessageBuffer = ArrayBuffer | NodeJS.TypedArray;
 
 export type MessageData =
   | { [property: string]: MessageData }
   | MessageData[]
   | boolean
+  | null
   | number
-  | string
-  | undefined;
+  | string;
 
-export type MessageProtocol = "HTTP/1.0" | "HTTP/1.1" | "HTTP/2" | "HTTP/3";
+export type MessageProtocol =
+  | "HTTP/0.9"
+  | "HTTP/1.0"
+  | "HTTP/1.1"
+  | "HTTP/2"
+  | "HTTP/3";
