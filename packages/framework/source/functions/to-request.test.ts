@@ -24,9 +24,9 @@ describe("toRequest(readable)", function () {
       expect(headers).to.be.instanceOf(Map);
       expect(isReadable(body)).to.be.true;
 
-      const { method, path, protocol } = request;
+      const { method, protocol, url } = request;
       expect(method).to.equal("GET");
-      expect(path).to.equal("/test");
+      expect(url.pathname).to.equal("/test");
       expect(protocol).to.equal("HTTP/1.1");
 
       const data = await toJSON(body);
