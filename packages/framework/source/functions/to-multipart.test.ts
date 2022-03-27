@@ -4,7 +4,7 @@ import { toBufferReadable } from "./to-buffer-readable.js";
 import { toBuffer } from "./to-buffer.js";
 import { toMultipartReadable } from "./to-multipart-readable.js";
 import { toMultipart } from "./to-multipart.js";
-import { toTextData } from "./to-text-data.js";
+import { toText } from "./to-text.js";
 
 describe("toMultipart(boundary, readable)", function () {
   context("when readable is a valid multipart", function () {
@@ -30,7 +30,7 @@ describe("toMultipart(boundary, readable)", function () {
 
       const readable = toMultipartReadable({ boundary, parts });
       for await (const part of toMultipart(boundary, readable)) {
-        const content = await toTextData(part);
+        const content = await toText(part);
         expect(content).to.equal(rawContent);
       }
     });
@@ -59,7 +59,7 @@ describe("toMultipart(boundary, readable)", function () {
       const multipartReadable = toMultipartReadable({ boundary, parts });
       const readable = toBufferReadable(await toBuffer(multipartReadable));
       for await (const part of toMultipart(boundary, readable)) {
-        const content = await toTextData(part);
+        const content = await toText(part);
         expect(content).to.equal(rawContent);
       }
     });
@@ -106,7 +106,7 @@ describe("toMultipart(boundary, readable)", function () {
       });
 
       for await (const part of toMultipart(boundary, readable)) {
-        const content = await toTextData(part);
+        const content = await toText(part);
         expect(content).to.equal(rawContent);
       }
     });
@@ -120,7 +120,7 @@ describe("toMultipart(boundary, readable)", function () {
 
       const readable = toBufferReadable(Buffer.from(`--${boundary}a`));
       for await (const part of toMultipart(boundary, readable)) {
-        await toTextData(part);
+        await toText(part);
       }
     });
   });
@@ -133,7 +133,7 @@ describe("toMultipart(boundary, readable)", function () {
 
       const readable = toBufferReadable(Buffer.from(`--${boundary}aa`));
       for await (const part of toMultipart(boundary, readable)) {
-        await toTextData(part);
+        await toText(part);
       }
     });
   });
@@ -162,7 +162,7 @@ describe("toMultipart(boundary, readable)", function () {
       const buffer = await toBuffer(multipartReadable);
       const readable = toBufferReadable(buffer.subarray(0, -2));
       try {
-        for await (const part of toMultipart(boundary, readable)) await toTextData(part);
+        for await (const part of toMultipart(boundary, readable)) await toText(part);
       } catch (error) {} /* eslint-disable-line no-empty */
     });
   });
@@ -199,7 +199,7 @@ describe("toMultipart(boundary, readable)", function () {
         },
       });
       try {
-        for await (const part of toMultipart(boundary, readable)) await toTextData(part);
+        for await (const part of toMultipart(boundary, readable)) await toText(part);
       } catch (error) {} /* eslint-disable-line no-empty */
     });
   });
