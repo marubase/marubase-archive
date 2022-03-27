@@ -50,9 +50,9 @@ export interface RequestContract extends MessageContract {
 
   setQueries(queries: Record<string, string>): this;
 
-  setQuery(key: string): this;
+  setQuery(key: string, value: string): this;
 
-  setScheme(protocol: string): this;
+  setScheme(scheme: string): this;
 
   setUrl(input: string, base?: string): this;
 }
