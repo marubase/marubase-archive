@@ -14,7 +14,7 @@ describe("Message", function () {
     message = new Message();
   });
 
-  describe("#from(readable)", function () {
+  describe("static from(readable)", function () {
     it("should return message", async function () {
       const source = new Message().setBody({ test: true });
       const stream = source.toStream();
