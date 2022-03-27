@@ -9,7 +9,7 @@ export async function toResponse(readable: Readable): Promise<RawResponse> {
   let buffer = Buffer.from([]);
   let chunk = await reader.next();
   let protocol = "HTTP/1.1";
-  let statusCode = "200";
+  let statusCode = 200;
   let statusText = "OK";
   for (; !chunk.done; chunk = await reader.next()) {
     buffer = Buffer.concat([buffer, chunk.value]);
@@ -35,7 +35,7 @@ export async function toResponse(readable: Readable): Promise<RawResponse> {
       throw new Error(`${context} ${problem} ${solution}`);
     }
     protocol = match[1].toUpperCase();
-    statusCode = match[2];
+    statusCode = parseInt(match[2]);
     statusText = match[3];
 
     for (let i = 1; i < rawHeaders.length; i++) {
