@@ -8,7 +8,11 @@ class RequestReadable extends Readable {
   public constructor(input: RawRequestInput, options?: ReadableOptions) {
     super(Object.assign({}, options));
 
-    const DEFAULT_REQUEST = { method: "GET", path: "/", protocol: "HTTP/1.1" };
+    const DEFAULT_REQUEST = {
+      method: "GET",
+      protocol: "HTTP/1.1",
+      url: new URL("http://127.0.0.1/"),
+    };
     this._request = Object.assign(DEFAULT_REQUEST, input);
   }
 
@@ -22,11 +26,19 @@ class RequestReadable extends Readable {
       const { body } = this._request;
       this._reader = body[Symbol.asyncIterator]();
 
-      const { method, path, protocol } = this._request;
-      const requestLine = `${method.toUpperCase()} ${path} ${protocol.toUpperCase()}\r\n`;
+      const method = this._request.method.toUpperCase();
+      const path = this._request.url.pathname;
+      const protocol = this._request.protocol.toUpperCase();
+      const requestLine = `${method} ${path} ${protocol}\r\n`;
       this.push(requestLine);
 
+      const { hostname } = this._request.url;
+      const hostHeader = `Host: ${hostname}\r\n`;
+      this.push(hostHeader);
+
       const { headers } = this._request;
+      headers.delete("Host");
+
       for (const [key, value] of headers.entries()) {
         const rawHeader = `${key}: ${value}\r\n`;
         this.push(rawHeader);
@@ -51,6 +63,6 @@ export type RawRequestInput = {
   body: Readable;
   headers: Map<string, string>;
   method?: string;
-  path?: string;
   protocol?: string;
+  url?: URL;
 };
