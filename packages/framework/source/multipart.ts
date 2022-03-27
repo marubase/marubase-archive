@@ -3,7 +3,6 @@ import { MessageContract } from "./contracts/message.contract.js";
 import { MultipartContract } from "./contracts/multipart.contract.js";
 import { FrameworkError } from "./errors/framework.error.js";
 import { isReadable } from "./functions/is-readable.js";
-import { toMessage } from "./functions/to-message.js";
 import { toMultipartReadable } from "./functions/to-multipart-readable.js";
 import { toMultipart } from "./functions/to-multipart.js";
 import { Message } from "./message.js";
@@ -54,8 +53,7 @@ export class Multipart implements MultipartContract {
         const cursor = await iterator.next();
         if (cursor.done) return { done: true, value: undefined };
 
-        const { body, headers } = await toMessage(cursor.value);
-        const value = new Message().setHeaders(headers).setBody(body);
+        const value = await Message.from(cursor.value);
         return { done: false, value };
       },
     };
