@@ -55,6 +55,7 @@ export interface RequestContract extends MessageContract {
   setScheme(scheme: string): this;
 
   setUrl(input: string, base?: string): this;
+  setUrl(url: URL): this;
 }
 
 export type RequestMethod =
