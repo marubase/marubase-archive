@@ -1,12 +1,12 @@
 import { expect } from "chai";
 import { toBufferReadable } from "./to-buffer-readable.js";
-import { toJsonData } from "./to-json-data.js";
+import { toJSON } from "./to-json.js";
 
-describe("toJsonData(readable)", function () {
+describe("toJSON(readable)", function () {
   it("should return JsonData", async function () {
     const readable = toBufferReadable(`{"test":true}`);
 
-    const data = await toJsonData(readable);
+    const data = await toJSON(readable);
     expect(data).to.deep.equal({ test: true });
   });
 });
