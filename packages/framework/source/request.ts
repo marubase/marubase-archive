@@ -14,7 +14,7 @@ export class Request extends Message implements RequestContract {
     return new Request()
       .setProtocol(rawRequest.protocol as MessageProtocol)
       .setMethod(rawRequest.method as RequestMethod)
-      .setPath(rawRequest.path)
+      .setUrl(rawRequest.url)
       .setHeaders(rawRequest.headers)
       .setBody(rawRequest.body);
   }
@@ -161,12 +161,22 @@ export class Request extends Message implements RequestContract {
     return this;
   }
 
-  public setUrl(input: string, base?: string): this {
-    this._url = new URL(input, base);
+  public setUrl(input: string, base?: string): this;
+  public setUrl(url: URL): this;
+  public setUrl(inputOrUrl: URL | string, base?: string): this {
+    this._url = !(inputOrUrl instanceof URL)
+      ? new URL(inputOrUrl, base)
+      : inputOrUrl;
     return this;
   }
 
   public toStream(): Readable {
-    return toRequestReadable(this);
+    return toRequestReadable({
+      body: this.body,
+      headers: this.headers,
+      method: this.method,
+      protocol: this.protocol,
+      url: this.url,
+    });
   }
 }
