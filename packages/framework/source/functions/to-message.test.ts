@@ -2,10 +2,10 @@ import { expect } from "chai";
 import { Readable } from "stream";
 import { isReadable } from "./is-readable.js";
 import { toBufferReadable } from "./to-buffer-readable.js";
-import { toJsonData } from "./to-json-data.js";
+import { toJSON } from "./to-json.js";
 import { toMessageReadable } from "./to-message-readable.js";
 import { toMessage } from "./to-message.js";
-import { toTextData } from "./to-text-data.js";
+import { toText } from "./to-text.js";
 
 describe("toMessage(readable)", function () {
   context("when readable is a valid message stream", function () {
@@ -23,7 +23,7 @@ describe("toMessage(readable)", function () {
       expect(headers).to.be.instanceOf(Map);
       expect(isReadable(body)).to.be.true;
 
-      const data = await toJsonData(body);
+      const data = await toJSON(body);
       expect(data).to.deep.equal({ test: true });
     });
   });
@@ -58,7 +58,7 @@ describe("toMessage(readable)", function () {
       try {
         const readable = toMessageReadable({ body, headers });
         const { body: content } = await toMessage(readable);
-        await toTextData(content);
+        await toText(content);
       } catch (error) {} /* eslint-disable-line no-empty */
     });
   });
