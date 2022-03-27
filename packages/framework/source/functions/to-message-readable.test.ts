@@ -3,7 +3,7 @@ import { Readable } from "stream";
 import { isReadable } from "./is-readable.js";
 import { toBufferReadable } from "./to-buffer-readable.js";
 import { toMessageReadable } from "./to-message-readable.js";
-import { toTextData } from "./to-text-data.js";
+import { toText } from "./to-text.js";
 
 describe("toMessageReadable(input)", function () {
   context("when input is message", function () {
@@ -23,7 +23,7 @@ describe("toMessageReadable(input)", function () {
       rawContent += `\r\n`;
       rawContent += `{"test":true}`;
 
-      const content = await toTextData(readable);
+      const content = await toText(readable);
       expect(content).to.equal(rawContent);
     });
   });
@@ -43,7 +43,7 @@ describe("toMessageReadable(input)", function () {
       expect(isReadable(readable)).to.be.true;
 
       try {
-        await toTextData(readable);
+        await toText(readable);
       } catch (error) {} /* eslint-disable-line no-empty */
     });
   });
