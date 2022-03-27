@@ -5,9 +5,9 @@ export interface ResponseContract extends MessageContract {
 
   readonly statusText: string;
 
-  setStatusCode(code: ResponseCode): this;
+  setStatusCode(statusCode: ResponseCode): this;
 
-  setStatusText(text: string): this;
+  setStatusText(statusText: string): this;
 }
 
 export type ResponseCode = keyof typeof ResponseText;
