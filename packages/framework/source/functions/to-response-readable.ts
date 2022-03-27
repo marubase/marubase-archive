@@ -10,7 +10,7 @@ class ResponseReadable extends Readable {
 
     const DEFAULT_RESPONSE = {
       protocol: "HTTP/1.1",
-      statusCode: "200",
+      statusCode: 200,
       statusText: "OK",
     };
     this._response = Object.assign(DEFAULT_RESPONSE, input);
@@ -55,6 +55,6 @@ export type RawResponseInput = {
   body: Readable;
   headers: Map<string, string>;
   protocol?: string;
-  statusCode?: string;
+  statusCode?: number;
   statusText?: string;
 };
