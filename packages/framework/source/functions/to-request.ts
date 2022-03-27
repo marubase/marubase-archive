@@ -9,8 +9,8 @@ export async function toRequest(readable: Readable): Promise<RawRequest> {
   let buffer = Buffer.from([]);
   let chunk = await reader.next();
   let method = "GET";
-  let path = "/";
   let protocol = "HTTP/1.1";
+  const url = new URL("http://127.0.0.1/");
   for (; !chunk.done; chunk = await reader.next()) {
     buffer = Buffer.concat([buffer, chunk.value]);
     if (buffer.length > MAX_HEADER_SIZE) {
@@ -35,7 +35,7 @@ export async function toRequest(readable: Readable): Promise<RawRequest> {
       throw new Error(`${context} ${problem} ${solution}`);
     }
     method = match[1].toUpperCase();
-    path = match[2];
+    url.pathname = match[2];
     protocol = match[3].toUpperCase();
 
     for (let i = 1; i < rawHeaders.length; i++) {
@@ -55,5 +55,5 @@ export async function toRequest(readable: Readable): Promise<RawRequest> {
     },
   });
   body.push(buffer);
-  return { body, headers, method, path, protocol };
+  return { body, headers, method, protocol, url };
 }
