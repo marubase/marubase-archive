@@ -1,23 +1,25 @@
 import {
   Callable,
   Resolvable,
-  ResolverContract,
   ResolverFactory,
+  ResolverInterface,
 } from "./resolver.contract.js";
-import { ScopeContract } from "./scope.contract.js";
+import { ScopeInterface } from "./scope.contract.js";
 
-export interface RegistryContract {
+export const RegistryContract = Symbol("RegistryContract");
+
+export interface RegistryInterface {
   readonly factory: ResolverFactory;
 
-  readonly keyMap: Map<RegistryKey, ResolverContract>;
+  readonly keyMap: Map<RegistryKey, ResolverInterface>;
 
-  readonly tagMap: Map<RegistryTag, Set<ResolverContract>>;
+  readonly tagMap: Map<RegistryTag, Set<ResolverInterface>>;
 
   bind(key: RegistryKey): RegistryBindTo;
 
   call<Result>(
     targetFn: Function,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result;
 
@@ -25,52 +27,55 @@ export interface RegistryContract {
 
   clearResolverByTags(
     tagSet: Set<RegistryTag>,
-    resolver: ResolverContract,
+    resolver: ResolverInterface,
   ): this;
 
   create<Result>(
     targetClass: Function,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result;
 
   fork(): this;
 
-  getResolverByKey(key: RegistryKey): ResolverContract | undefined;
+  getResolverByKey(key: RegistryKey): ResolverInterface | undefined;
 
-  getResolverByTag(tag: RegistryTag): ResolverContract[];
+  getResolverByTag(tag: RegistryTag): ResolverInterface[];
 
   resolve<Result>(
     resolvable: Resolvable,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result;
 
   resolveTag<Result>(
     tag: RegistryTag,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result[];
 
-  setResolverByKey(key: RegistryKey, resolver: ResolverContract): this;
+  setResolverByKey(key: RegistryKey, resolver: ResolverInterface): this;
 
-  setResolverByTags(tagSet: Set<RegistryTag>, resolver: ResolverContract): this;
+  setResolverByTags(
+    tagSet: Set<RegistryTag>,
+    resolver: ResolverInterface,
+  ): this;
 }
 
 export type RegistryBindTo = {
-  to(targetClass: Function): ResolverContract;
+  to(targetClass: Function): ResolverInterface;
 
-  toAlias(targetKey: RegistryKey): ResolverContract;
+  toAlias(targetKey: RegistryKey): ResolverInterface;
 
-  toCallable(callable: Callable): ResolverContract;
+  toCallable(callable: Callable): ResolverInterface;
 
-  toConstant(constant: unknown): ResolverContract;
+  toConstant(constant: unknown): ResolverInterface;
 
-  toFunction(targetFn: Function): ResolverContract;
+  toFunction(targetFn: Function): ResolverInterface;
 
-  toSelf(): ResolverContract;
+  toSelf(): ResolverInterface;
 
-  toTag(targetTag: RegistryTag): ResolverContract;
+  toTag(targetTag: RegistryTag): ResolverInterface;
 };
 
 export type RegistryKey = Function | string | symbol;
