@@ -1,33 +1,33 @@
 import { Cache } from "./cache.js";
-import { CacheContract } from "./contracts/cache.contract.js";
-import { ForkType, ScopeContract } from "./contracts/scope.contract.js";
+import { CacheInterface } from "./contracts/cache.contract.js";
+import { ForkType, ScopeInterface } from "./contracts/scope.contract.js";
 
-export class Scope implements ScopeContract {
-  protected _container: CacheContract;
+export class Scope implements ScopeInterface {
+  protected _container: CacheInterface;
 
-  protected _request: CacheContract;
+  protected _request: CacheInterface;
 
-  protected _singleton: CacheContract;
+  protected _singleton: CacheInterface;
 
   public constructor(
-    singleton: CacheContract = new Cache(),
-    container: CacheContract = new Cache(),
-    request: CacheContract = new Cache(),
+    singleton: CacheInterface = new Cache(),
+    container: CacheInterface = new Cache(),
+    request: CacheInterface = new Cache(),
   ) {
     this._singleton = singleton;
     this._container = container;
     this._request = request;
   }
 
-  public get container(): CacheContract {
+  public get container(): CacheInterface {
     return this._container;
   }
 
-  public get request(): CacheContract {
+  public get request(): CacheInterface {
     return this._request;
   }
 
-  public get singleton(): CacheContract {
+  public get singleton(): CacheInterface {
     return this._singleton;
   }
 
