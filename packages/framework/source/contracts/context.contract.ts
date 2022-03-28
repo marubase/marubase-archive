@@ -36,9 +36,13 @@ export interface ContextContract extends Map<unknown, unknown> {
 
   readonly url: URL;
 
+  call<Result>(targetFn: Function, ...args: unknown[]): Result;
+
+  create<Result>(targetClass: Function, ...args: unknown[]): Result;
+
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
   resolveTag<Result>(tag: RegistryTag, ...args: unknown[]): Result[];
 
-  respondWith(code: ResponseCode, text?: string): ResponseContract;
+  respondWith(statusCode: ResponseCode, statusText?: string): ResponseContract;
 }
