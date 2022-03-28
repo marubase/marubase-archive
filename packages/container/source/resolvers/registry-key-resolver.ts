@@ -1,24 +1,24 @@
 import {
-  RegistryContract,
+  RegistryInterface,
   RegistryKey,
 } from "../contracts/registry.contract.js";
-import { ResolverContract } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { ResolverInterface } from "../contracts/resolver.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class RegistryKeyResolver
   extends BaseResolver
-  implements ResolverContract
+  implements ResolverInterface
 {
   protected _targetKey: RegistryKey;
 
-  public constructor(registry: RegistryContract, targetKey: RegistryKey) {
+  public constructor(registry: RegistryInterface, targetKey: RegistryKey) {
     super(registry);
     this._targetKey = targetKey;
   }
 
-  public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
+  public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
     const resolver = this._registry.getResolverByKey(this._targetKey);
     if (typeof resolver === "undefined") {
       const context = `Resolving registry key resolver.`;
