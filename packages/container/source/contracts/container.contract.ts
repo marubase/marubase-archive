@@ -1,20 +1,22 @@
 import {
   RegistryBindTo,
-  RegistryContract,
+  RegistryInterface,
   RegistryKey,
   RegistryTag,
 } from "./registry.contract.js";
-import { Resolvable, ResolverContract } from "./resolver.contract.js";
-import { ScopeContract } from "./scope.contract.js";
+import { Resolvable, ResolverInterface } from "./resolver.contract.js";
+import { ScopeInterface } from "./scope.contract.js";
 
-export interface ContainerContract {
+export const ContainerContract = Symbol("ContainerContract");
+
+export interface ContainerInterface {
   readonly booted: boolean;
 
   readonly providerMap: Map<ProviderName, Provider>;
 
-  readonly registry: RegistryContract;
+  readonly registry: RegistryInterface;
 
-  readonly scope: ScopeContract;
+  readonly scope: ScopeInterface;
 
   bind(key: RegistryKey): RegistryBindTo;
 
@@ -34,7 +36,7 @@ export interface ContainerContract {
 
   resolveTag<Result>(tag: RegistryTag, ...args: unknown[]): Result[];
 
-  resolver(key: RegistryKey): ResolverContract | undefined;
+  resolver(key: RegistryKey): ResolverInterface | undefined;
 
   shutdown(): Promise<void>;
 
@@ -42,13 +44,13 @@ export interface ContainerContract {
 }
 
 export type Provider = {
-  boot?(container: ContainerContract): Promise<void>;
+  boot?(container: ContainerInterface): Promise<void>;
 
-  install?(container: ContainerContract): void;
+  install?(container: ContainerInterface): void;
 
-  shutdown?(container: ContainerContract): Promise<void>;
+  shutdown?(container: ContainerInterface): Promise<void>;
 
-  uninstall?(container: ContainerContract): void;
+  uninstall?(container: ContainerInterface): void;
 };
 
 export type ProviderName = string | symbol;
