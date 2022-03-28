@@ -210,6 +210,17 @@ describe("Container", function () {
         expect(run).to.throw(ContainerError);
       });
     });
+    context("when container name already exists (symbol)", function () {
+      beforeEach(async function () {
+        const argProvider: Provider = {};
+        container.install(Symbol.for("provider"), argProvider);
+      });
+      it("should throw error", async function () {
+        const argProvider: Provider = {};
+        const run = (): unknown => container.install(Symbol.for("provider"), argProvider);
+        expect(run).to.throw(ContainerError);
+      });
+    });
   });
 
   describe("#installed(name)", function () {
@@ -388,6 +399,15 @@ describe("Container", function () {
       });
       it("should throw error", async function () {
         const run = (): unknown => container.uninstall("provider");
+        expect(run).to.throw(ContainerError);
+      });
+    });
+    context("when container is booted and no provider installed (symbol)", function () {
+      beforeEach(async function () {
+        await container.boot();
+      });
+      it("should throw error", async function () {
+        const run = (): unknown => container.uninstall(Symbol.for("provider"));
         expect(run).to.throw(ContainerError);
       });
     });
