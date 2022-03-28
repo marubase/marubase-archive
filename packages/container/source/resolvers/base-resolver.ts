@@ -1,19 +1,19 @@
 import {
-  RegistryContract,
+  RegistryInterface,
   RegistryKey,
   RegistryTag,
 } from "../contracts/registry.contract.js";
 import {
-  ResolverContract,
+  ResolverInterface,
   ResolverScope,
 } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
 
-export class BaseResolver implements ResolverContract {
+export class BaseResolver implements ResolverInterface {
   protected _dependencies: RegistryKey[] = [];
 
-  protected _registry: RegistryContract;
+  protected _registry: RegistryInterface;
 
   protected _registryKey?: RegistryKey;
 
@@ -21,7 +21,7 @@ export class BaseResolver implements ResolverContract {
 
   protected _scope: ResolverScope = "transient";
 
-  public constructor(registry: RegistryContract) {
+  public constructor(registry: RegistryInterface) {
     this._registry = registry;
   }
 
@@ -29,7 +29,7 @@ export class BaseResolver implements ResolverContract {
     return this._dependencies;
   }
 
-  public get registry(): RegistryContract {
+  public get registry(): RegistryInterface {
     return this._registry;
   }
 
@@ -65,7 +65,7 @@ export class BaseResolver implements ResolverContract {
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
+  public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
     const context = `Resolving base resolver.`;
     const problem = `Resolve method not implemented.`;
     const solution = `Please extend the base resolver and override the resolve method.`;
