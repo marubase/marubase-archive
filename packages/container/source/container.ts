@@ -125,7 +125,8 @@ export class Container implements ContainerContract {
   }
 
   public uninstall(name: ProviderName): this {
-    if (!this._providerMap.has(name)) {
+    const provider = this._providerMap.get(name);
+    if (typeof provider === "undefined") {
       const nameText = typeof name === "symbol" ? name.toString() : name;
 
       const context = `Uninstalling provider '${nameText}'.`;
@@ -133,9 +134,6 @@ export class Container implements ContainerContract {
       const solution = `Please uninstall another name or install provider on the name.`;
       throw new ContainerError(`${context} ${problem} ${solution}`);
     }
-
-    const provider = this._providerMap.get(name);
-    if (typeof provider === "undefined") return this;
 
     if (this._booted && provider.shutdown)
       provider.shutdown(this).then(() => {
