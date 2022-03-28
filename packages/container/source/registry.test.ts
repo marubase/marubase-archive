@@ -1,16 +1,16 @@
 import { expect } from "chai";
 import { instance, mock, when } from "ts-mockito";
-import { Callable, ResolverContract } from "./contracts/resolver.contract.js";
-import { ScopeContract } from "./contracts/scope.contract.js";
+import { Callable, ResolverInterface } from "./contracts/resolver.contract.js";
+import { ScopeInterface } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
 import { BaseResolver } from "./resolvers/base-resolver.js";
 
 describe("Registry", function () {
-  let mockResolver: ResolverContract;
-  let mockScope: ScopeContract;
-  let instanceResolver: ResolverContract;
-  let instanceScope: ScopeContract;
+  let mockResolver: ResolverInterface;
+  let mockScope: ScopeInterface;
+  let instanceResolver: ResolverInterface;
+  let instanceScope: ScopeInterface;
   let registry: Registry;
   beforeEach(async function () {
     mockResolver = mock();
@@ -246,7 +246,7 @@ describe("Registry", function () {
         const argTagSet = new Set(["tag"]);
         registry.setResolverByTags(argTagSet, instanceResolver);
 
-        const mockExtra = mock<ResolverContract>();
+        const mockExtra = mock<ResolverInterface>();
         const instanceExtra = instance(mockExtra);
         registry.setResolverByTags(argTagSet, instance(instanceExtra));
       });
