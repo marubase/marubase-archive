@@ -1,36 +1,37 @@
 import {
   ContainerContract,
+  ContainerInterface,
   Provider,
   ProviderName,
 } from "./contracts/container.contract.js";
 import {
   RegistryBindTo,
-  RegistryContract,
+  RegistryInterface,
   RegistryKey,
   RegistryTag,
 } from "./contracts/registry.contract.js";
-import { ResolverContract } from "./contracts/resolver.contract.js";
-import { ScopeContract } from "./contracts/scope.contract.js";
+import { ResolverInterface } from "./contracts/resolver.contract.js";
+import { ScopeInterface } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
 import { Scope } from "./scope.js";
 
-export class Container implements ContainerContract {
+export class Container implements ContainerInterface {
   protected _booted = false;
 
   protected _providerMap = new Map<ProviderName, Provider>();
 
-  protected _registry: RegistryContract;
+  protected _registry: RegistryInterface;
 
-  protected _scope: ScopeContract;
+  protected _scope: ScopeInterface;
 
   public constructor(
-    registry: RegistryContract = new Registry(),
-    scope: ScopeContract = new Scope(),
+    registry: RegistryInterface = new Registry(),
+    scope: ScopeInterface = new Scope(),
   ) {
     this._registry = registry;
     this._scope = scope;
-    this.bind("Container").toConstant(this);
+    this.bind(ContainerContract).toConstant(this);
   }
 
   public get booted(): boolean {
@@ -41,11 +42,11 @@ export class Container implements ContainerContract {
     return this._providerMap;
   }
 
-  public get registry(): RegistryContract {
+  public get registry(): RegistryInterface {
     return this._registry;
   }
 
-  public get scope(): ScopeContract {
+  public get scope(): ScopeInterface {
     return this._scope;
   }
 
@@ -110,7 +111,7 @@ export class Container implements ContainerContract {
     return this._registry.resolveTag(tag, requestScope, ...args);
   }
 
-  public resolver(key: RegistryKey): ResolverContract | undefined {
+  public resolver(key: RegistryKey): ResolverInterface | undefined {
     return this._registry.getResolverByKey(key);
   }
 
