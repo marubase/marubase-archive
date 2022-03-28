@@ -1,5 +1,7 @@
 import { RegistryKey } from "./registry.contract.js";
 
-export interface CacheContract extends Map<RegistryKey, unknown> {
+export const CacheContract = Symbol("CacheContract");
+
+export interface CacheInterface extends Map<RegistryKey, unknown> {
   fork(): this;
 }
