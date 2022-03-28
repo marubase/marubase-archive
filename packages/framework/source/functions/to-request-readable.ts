@@ -23,16 +23,16 @@ class RequestReadable extends Readable {
         (error) => this.destroy(error),
       );
     } else {
-      const { body } = this._request;
+      const { body, url } = this._request;
       this._reader = body[Symbol.asyncIterator]();
 
       const method = this._request.method.toUpperCase();
-      const path = this._request.url.pathname;
+      const path = url.pathname + url.search;
       const protocol = this._request.protocol.toUpperCase();
       const requestLine = `${method} ${path} ${protocol}\r\n`;
       this.push(requestLine);
 
-      const { hostname } = this._request.url;
+      const { hostname } = url;
       const hostHeader = `Host: ${hostname}\r\n`;
       this.push(hostHeader);
 
