@@ -1,14 +1,16 @@
 import {
-  RegistryContract,
+  RegistryInterface,
   RegistryKey,
   RegistryTag,
 } from "./registry.contract.js";
-import { ScopeContract } from "./scope.contract.js";
+import { ScopeInterface } from "./scope.contract.js";
 
-export interface ResolverContract {
+export const ResolverContract = Symbol("ResolverContract");
+
+export interface ResolverInterface {
   readonly dependencies: RegistryKey[];
 
-  readonly registry: RegistryContract;
+  readonly registry: RegistryInterface;
 
   readonly registryKey?: RegistryKey;
 
@@ -22,7 +24,7 @@ export interface ResolverContract {
 
   clearRegistryTags(): this;
 
-  resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result;
+  resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result;
 
   setDependencies(...dependencies: RegistryKey[]): this;
 
@@ -35,34 +37,34 @@ export interface ResolverContract {
 
 export type ResolverFactory = {
   createCallableResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     callable: Callable,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createClassResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     targetClass: Function,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createConstantResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     constant: unknown,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createFunctionResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     targetFn: Function,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createRegistryKeyResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     targetKey: RegistryKey,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createRegistryTagResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     targetTag: RegistryTag,
-  ): ResolverContract;
+  ): ResolverInterface;
 };
 
 export type Callable = [RegistryKey, string | symbol];
