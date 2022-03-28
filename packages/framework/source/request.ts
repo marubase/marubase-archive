@@ -92,10 +92,7 @@ export class Request extends Message implements RequestContract {
   }
 
   public clearQuery(key: string): this {
-    const searchParams = new URLSearchParams(this._url.search);
-    searchParams.delete(key);
-
-    this._url.search = searchParams.toString();
+    this._url.searchParams.delete(key);
     return this;
   }
 
@@ -128,7 +125,8 @@ export class Request extends Message implements RequestContract {
   }
 
   public setOrigin(origin: string): this {
-    this._url = new URL(this._url, origin);
+    const { hash, pathname, search } = this._url;
+    this._url = new URL(pathname + search + hash, origin);
     return this;
   }
 
