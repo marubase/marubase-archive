@@ -10,7 +10,7 @@ export async function toRequest(readable: Readable): Promise<RawRequest> {
   let chunk = await reader.next();
   let method = "GET";
   let protocol = "HTTP/1.1";
-  const url = new URL("http://127.0.0.1/");
+  let url = new URL("http://127.0.0.1/");
   for (; !chunk.done; chunk = await reader.next()) {
     buffer = Buffer.concat([buffer, chunk.value]);
     if (buffer.length > MAX_HEADER_SIZE) {
@@ -35,13 +35,15 @@ export async function toRequest(readable: Readable): Promise<RawRequest> {
       throw new Error(`${context} ${problem} ${solution}`);
     }
     method = match[1].toUpperCase();
-    url.pathname = match[2];
+    url = new URL(match[2], url.origin);
     protocol = match[3].toUpperCase();
 
     for (let i = 1; i < rawHeaders.length; i++) {
       const [key, value] = rawHeaders[i].split(":");
       headers.set(key.trim(), value.trim());
     }
+
+    if (headers.has("Host")) url.hostname = headers.get("Host") as string;
     buffer = buffer.subarray(separatorIndex + separator.length);
     break;
   }
