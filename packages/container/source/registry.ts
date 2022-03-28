@@ -1,15 +1,15 @@
 import {
   RegistryBindTo,
-  RegistryContract,
+  RegistryInterface,
   RegistryKey,
   RegistryTag,
 } from "./contracts/registry.contract.js";
 import {
   Resolvable,
-  ResolverContract,
   ResolverFactory,
+  ResolverInterface,
 } from "./contracts/resolver.contract.js";
-import { ScopeContract } from "./contracts/scope.contract.js";
+import { ScopeInterface } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { CallableResolver } from "./resolvers/callable-resolver.js";
 import { ClassResolver } from "./resolvers/class-resolver.js";
@@ -18,16 +18,16 @@ import { FunctionResolver } from "./resolvers/function-resolver.js";
 import { RegistryKeyResolver } from "./resolvers/registry-key-resolver.js";
 import { RegistryTagResolver } from "./resolvers/registry-tag-resolver.js";
 
-export class Registry implements RegistryContract {
+export class Registry implements RegistryInterface {
   protected _factory: ResolverFactory;
 
-  protected _keyMap: Map<RegistryKey, ResolverContract>;
+  protected _keyMap: Map<RegistryKey, ResolverInterface>;
 
-  protected _tagMap: Map<RegistryTag, Set<ResolverContract>>;
+  protected _tagMap: Map<RegistryTag, Set<ResolverInterface>>;
 
   public constructor(
-    keyMap: Map<RegistryKey, ResolverContract> = new Map(),
-    tagMap: Map<RegistryTag, Set<ResolverContract>> = new Map(),
+    keyMap: Map<RegistryKey, ResolverInterface> = new Map(),
+    tagMap: Map<RegistryTag, Set<ResolverInterface>> = new Map(),
     factory = DefaultResolverFactory,
   ) {
     this._keyMap = keyMap;
@@ -39,11 +39,11 @@ export class Registry implements RegistryContract {
     return this._factory;
   }
 
-  public get keyMap(): Map<RegistryKey, ResolverContract> {
+  public get keyMap(): Map<RegistryKey, ResolverInterface> {
     return this._keyMap;
   }
 
-  public get tagMap(): Map<RegistryTag, Set<ResolverContract>> {
+  public get tagMap(): Map<RegistryTag, Set<ResolverInterface>> {
     return this._tagMap;
   }
 
@@ -93,7 +93,7 @@ export class Registry implements RegistryContract {
 
   public call<Result>(
     targetFn: Function,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result {
     return this._factory
@@ -108,7 +108,7 @@ export class Registry implements RegistryContract {
 
   public clearResolverByTags(
     tagSet: Set<RegistryTag>,
-    resolver: ResolverContract,
+    resolver: ResolverInterface,
   ): this {
     for (const tag of tagSet) {
       const resolverSet = this._tagMap.get(tag);
@@ -122,7 +122,7 @@ export class Registry implements RegistryContract {
 
   public create<Result>(
     targetClass: Function,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result {
     return this._factory
@@ -139,18 +139,18 @@ export class Registry implements RegistryContract {
     return new Static(forkKeyMap, forkTagMap, this._factory) as this;
   }
 
-  public getResolverByKey(key: RegistryKey): ResolverContract | undefined {
+  public getResolverByKey(key: RegistryKey): ResolverInterface | undefined {
     return this._keyMap.get(key);
   }
 
-  public getResolverByTag(tag: RegistryTag): ResolverContract[] {
+  public getResolverByTag(tag: RegistryTag): ResolverInterface[] {
     const resolverSet = this._tagMap.get(tag);
     return typeof resolverSet !== "undefined" ? Array.from(resolverSet) : [];
   }
 
   public resolve<Result>(
     resolvable: Resolvable,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result {
     if (typeof resolvable === "string") {
@@ -169,7 +169,7 @@ export class Registry implements RegistryContract {
 
   public resolveTag<Result>(
     tag: RegistryTag,
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result[] {
     return this._factory
@@ -177,19 +177,19 @@ export class Registry implements RegistryContract {
       .resolve(scope, ...args);
   }
 
-  public setResolverByKey(key: RegistryKey, resolver: ResolverContract): this {
+  public setResolverByKey(key: RegistryKey, resolver: ResolverInterface): this {
     this._keyMap.set(key, resolver);
     return this;
   }
 
   public setResolverByTags(
     tagSet: Set<RegistryTag>,
-    resolver: ResolverContract,
+    resolver: ResolverInterface,
   ): this {
     for (const tag of tagSet) {
       if (!this._tagMap.has(tag)) this._tagMap.set(tag, new Set());
 
-      const resolverSet = this._tagMap.get(tag) as Set<ResolverContract>;
+      const resolverSet = this._tagMap.get(tag) as Set<ResolverInterface>;
       resolverSet.add(resolver);
     }
     return this;
