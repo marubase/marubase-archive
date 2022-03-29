@@ -1,7 +1,7 @@
 import { Readable } from "stream";
-import { MultipartContract } from "./multipart.contract.js";
+import { MultipartInterface } from "./multipart.contract.js";
 
-export interface MessageContract {
+export interface MessageInterface {
   readonly body: Readable;
 
   readonly headers: Map<string, string>;
@@ -16,7 +16,7 @@ export interface MessageContract {
 
   setBody(buffer: MessageBuffer): this;
   setBody(data: MessageData): this;
-  setBody(multipart: MultipartContract): this;
+  setBody(multipart: MultipartInterface): this;
   setBody(stream: Readable): this;
   setBody(text: string): this;
 
@@ -31,7 +31,7 @@ export interface MessageContract {
 
   toData(): Promise<MessageData>;
 
-  toMultipart(): MultipartContract;
+  toMultipart(): MultipartInterface;
 
   toStream(): Readable;
 
