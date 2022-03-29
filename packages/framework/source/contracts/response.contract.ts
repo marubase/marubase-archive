@@ -1,6 +1,6 @@
-import { MessageContract } from "./message.contract.js";
+import { MessageInterface } from "./message.contract.js";
 
-export interface ResponseContract extends MessageContract {
+export interface ResponseInterface extends MessageInterface {
   readonly statusCode: ResponseCode;
 
   readonly statusText: string;
