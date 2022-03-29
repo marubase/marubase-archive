@@ -1,7 +1,7 @@
 import { Readable } from "stream";
-import { MessageContract } from "./message.contract.js";
+import { MessageInterface } from "./message.contract.js";
 
-export interface MultipartContract extends AsyncIterable<MessageContract> {
+export interface MultipartInterface extends AsyncIterable<MessageInterface> {
   readonly boundary: string;
 
   readonly contentType: string;
