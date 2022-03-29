@@ -1,15 +1,8 @@
-import {
-  ContainerContract,
-  RegistryTag,
-  Resolvable,
-} from "@marubase/container";
 import { MessageProtocol } from "./message.contract.js";
-import { RequestContract, RequestMethod } from "./request.contract.js";
-import { ResponseCode, ResponseContract } from "./response.contract.js";
+import { RequestInterface, RequestMethod } from "./request.contract.js";
+import { ResponseCode, ResponseInterface } from "./response.contract.js";
 
 export interface ContextContract extends Map<unknown, unknown> {
-  readonly container: ContainerContract;
-
   readonly credential?: [string, string] | string;
 
   readonly hash: string;
@@ -30,19 +23,11 @@ export interface ContextContract extends Map<unknown, unknown> {
 
   readonly queries: Record<string, string>;
 
-  readonly request: RequestContract;
+  readonly request: RequestInterface;
 
   readonly scheme: string;
 
   readonly url: URL;
 
-  call<Result>(targetFn: Function, ...args: unknown[]): Result;
-
-  create<Result>(targetClass: Function, ...args: unknown[]): Result;
-
-  resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
-
-  resolveTag<Result>(tag: RegistryTag, ...args: unknown[]): Result[];
-
-  respondWith(statusCode: ResponseCode, statusText?: string): ResponseContract;
+  respondWith(statusCode: ResponseCode, statusText?: string): ResponseInterface;
 }
