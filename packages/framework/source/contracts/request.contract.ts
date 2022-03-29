@@ -1,6 +1,6 @@
-import { MessageContract } from "./message.contract.js";
+import { MessageInterface } from "./message.contract.js";
 
-export interface RequestContract extends MessageContract {
+export interface RequestInterface extends MessageInterface {
   readonly credential?: [string, string] | string;
 
   readonly hash: string;
