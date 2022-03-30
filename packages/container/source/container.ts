@@ -1,8 +1,8 @@
 import {
   ContainerContract,
   ContainerInterface,
-  Provider,
-  ProviderName,
+  ContainerProvider,
+  ContainerProviderName,
 } from "./contracts/container.contract.js";
 import {
   RegistryBindTo,
@@ -19,7 +19,7 @@ import { Scope } from "./scope.js";
 export class Container implements ContainerInterface {
   protected _booted = false;
 
-  protected _providerMap = new Map<ProviderName, Provider>();
+  protected _providerMap = new Map<ContainerProviderName, ContainerProvider>();
 
   protected _registry: RegistryInterface;
 
@@ -38,7 +38,7 @@ export class Container implements ContainerInterface {
     return this._booted;
   }
 
-  public get providerMap(): Map<ProviderName, Provider> {
+  public get providerMap(): Map<ContainerProviderName, ContainerProvider> {
     return this._providerMap;
   }
 
@@ -81,12 +81,15 @@ export class Container implements ContainerInterface {
     return new Static(forkRegistry, containerScope) as this;
   }
 
-  public install(name: ProviderName, provider: Provider): this {
+  public install(
+    name: ContainerProviderName,
+    provider: ContainerProvider,
+  ): this {
     if (this._providerMap.has(name)) {
       const nameText = typeof name === "symbol" ? name.toString() : name;
 
       const context = `Installing provider '${nameText}'.`;
-      const problem = `Provider name already exists.`;
+      const problem = `ContainerProvider name already exists.`;
       const solution = `Please install on another name or uninstall existing provider.`;
       throw new ContainerError(`${context} ${problem} ${solution}`);
     }
@@ -97,7 +100,7 @@ export class Container implements ContainerInterface {
     return this;
   }
 
-  public installed(name: ProviderName): boolean {
+  public installed(name: ContainerProviderName): boolean {
     return this._providerMap.has(name);
   }
 
@@ -125,13 +128,13 @@ export class Container implements ContainerInterface {
     this._booted = false;
   }
 
-  public uninstall(name: ProviderName): this {
+  public uninstall(name: ContainerProviderName): this {
     const provider = this._providerMap.get(name);
     if (typeof provider === "undefined") {
       const nameText = typeof name === "symbol" ? name.toString() : name;
 
       const context = `Uninstalling provider '${nameText}'.`;
-      const problem = `Provider name does not exists.`;
+      const problem = `ContainerProvider name does not exists.`;
       const solution = `Please uninstall another name or install provider on the name.`;
       throw new ContainerError(`${context} ${problem} ${solution}`);
     }
