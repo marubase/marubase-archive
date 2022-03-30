@@ -26,6 +26,8 @@ export interface ContainerInterface {
 
   create<Result>(targetClass: Function, ...args: unknown[]): Result;
 
+  factory<Result>(resolvable: Resolvable): (...args: unknown[]) => Result;
+
   fork(): this;
 
   install(name: ContainerProviderName, provider: ContainerProvider): this;
