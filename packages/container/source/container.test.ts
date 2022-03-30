@@ -131,6 +131,26 @@ describe("Container", function () {
     });
   });
 
+  describe("#factory(resolvable)", function () {
+    context("when there is record", function () {
+      beforeEach(async function () {
+        container.bind(Date).toSelf();
+      });
+      it("should return factory", async function () {
+        const returnFactory = container.factory(Date);
+        const returnInstance = returnFactory();
+        expect(returnInstance).to.be.an.instanceOf(Date);
+      });
+    });
+    context("when there is no record", function () {
+      it("should throw error", async function () {
+        const returnFactory = container.factory(Date);
+        const run = (): unknown => returnFactory();
+        expect(run).to.throw(ContainerError);
+      });
+    });
+  });
+
   describe("#fork()", function () {
     it("should return fork", async function () {
       const returnFork = container.fork();
