@@ -10,7 +10,10 @@ import {
   RegistryKey,
   RegistryTag,
 } from "./contracts/registry.contract.js";
-import { ResolverInterface } from "./contracts/resolver.contract.js";
+import {
+  Resolvable,
+  ResolverInterface,
+} from "./contracts/resolver.contract.js";
 import { ScopeInterface } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
@@ -74,6 +77,12 @@ export class Container implements ContainerInterface {
     return this._registry.create(targetClass, requestScope, ...args);
   }
 
+  public factory<Result>(
+    resolvable: Resolvable,
+  ): (...args: unknown[]) => Result {
+    return (...args) => this.resolve(resolvable, ...args);
+  }
+
   public fork(): this {
     const Static = this.constructor as typeof Container;
     const forkRegistry = this._registry.fork();
@@ -104,7 +113,7 @@ export class Container implements ContainerInterface {
     return this._providerMap.has(name);
   }
 
-  public resolve<Result>(resolvable: RegistryKey, ...args: unknown[]): Result {
+  public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
     const requestScope = this._scope.fork("request");
     return this._registry.resolve(resolvable, requestScope, ...args);
   }
