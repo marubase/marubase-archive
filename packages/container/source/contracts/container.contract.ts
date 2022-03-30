@@ -12,7 +12,7 @@ export const ContainerContract = Symbol("ContainerContract");
 export interface ContainerInterface {
   readonly booted: boolean;
 
-  readonly providerMap: Map<ProviderName, Provider>;
+  readonly providerMap: Map<ContainerProviderName, ContainerProvider>;
 
   readonly registry: RegistryInterface;
 
@@ -28,9 +28,9 @@ export interface ContainerInterface {
 
   fork(): this;
 
-  install(name: ProviderName, provider: Provider): this;
+  install(name: ContainerProviderName, provider: ContainerProvider): this;
 
-  installed(name: ProviderName): boolean;
+  installed(name: ContainerProviderName): boolean;
 
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
@@ -40,10 +40,10 @@ export interface ContainerInterface {
 
   shutdown(): Promise<void>;
 
-  uninstall(name: ProviderName): this;
+  uninstall(name: ContainerProviderName): this;
 }
 
-export type Provider = {
+export type ContainerProvider = {
   boot?(container: ContainerInterface): Promise<void>;
 
   install?(container: ContainerInterface): void;
@@ -53,4 +53,4 @@ export type Provider = {
   uninstall?(container: ContainerInterface): void;
 };
 
-export type ProviderName = string | symbol;
+export type ContainerProviderName = string | symbol;
