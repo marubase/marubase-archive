@@ -104,13 +104,13 @@ importers:
     dependencies:
       reflect-metadata: 0.1.13
 
-  packages/framework:
+  packages/core:
     specifiers:
       '@marubase/container': workspace:^0.0.0
     dependencies:
       '@marubase/container': link:../container
 
-  packages/kernel:
+  packages/framework:
     specifiers:
       '@marubase/container': workspace:^0.0.0
     dependencies:

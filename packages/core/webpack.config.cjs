@@ -4,9 +4,9 @@ module.exports = Object.assign(require("../../webpack.config.js"), {
   entry: path.join(process.cwd(), "source", "index.ts"),
   mode: "production",
   output: {
-    filename: "kernel.bundle.js",
+    filename: "core.bundle.js",
     library: {
-      name: ["Marubase", "Kernel"],
+      name: ["Marubase", "Core"],
       type: "assign-properties",
     },
     path: path.join(process.cwd(), "build"),
