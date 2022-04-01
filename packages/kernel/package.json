@@ -53,6 +53,6 @@
     "access": "public"
   },
   "dependencies": {
-    "reflect-metadata": "^0.1.13"
+    "@marubase/container": "workspace:^0.0.0"
   }
 }
