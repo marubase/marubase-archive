@@ -104,7 +104,7 @@ importers:
     dependencies:
       reflect-metadata: 0.1.13
 
-  packages/core:
+  packages/foundation:
     specifiers:
       '@marubase/container': workspace:^0.0.0
     devDependencies:
