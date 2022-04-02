@@ -107,7 +107,7 @@ importers:
   packages/core:
     specifiers:
       '@marubase/container': workspace:^0.0.0
-    dependencies:
+    devDependencies:
       '@marubase/container': link:../container
 
   packages/framework:
