@@ -13,7 +13,7 @@ export async function toMessage(readable: Readable): Promise<MessageRecord> {
     buffer = Buffer.concat([buffer, chunk.value]);
     if (buffer.length > MAX_HEADERS_SIZE) {
       const context = `Parsing message readable.`;
-      const problem = `No headers found at the first ${MAX_HEADERS_SIZE} bytes.`;
+      const problem = `No headers found in the first ${MAX_HEADERS_SIZE} bytes.`;
       const solution = `Please parse a valid message.`;
       throw new Error(`${context} ${problem} ${solution}`);
     }
