@@ -75,4 +75,27 @@ describe("toMessageReadable(message, options", function () {
       expect(messageText).to.equal(rawMessage);
     });
   });
+  context("when message body throw error", function () {
+    it("should throw error", async function () {
+      const headers = new Map([["Content-Type", "text/plain"]]);
+      const body = new Readable({
+        read() {
+          const error = new Error("test error");
+          this.destroy(error);
+        },
+      });
+
+      try {
+        const message = { body, headers };
+        const messageChunks: Buffer[] = [];
+        for await (const messageChunk of toMessageReadable(message)) {
+          messageChunks.push(messageChunk);
+        }
+
+        throw new Error("it should never happen");
+      } catch (error) {
+        expect(error).to.be.an.instanceOf(Error);
+      }
+    });
+  });
 });
