@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Readable } from "stream";
 import { toMessageReadable } from "./to-message-readable.js";
 
-describe("toMessageReadable(message, options", function () {
+describe("toMessageReadable(message, options)", function () {
   context("when message have single header", function () {
     it("should return message readable", async function () {
       const headers = new Map([["Content-Type", "text/plain"]]);
