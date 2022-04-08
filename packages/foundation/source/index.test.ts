@@ -1,1 +1,1 @@
-import "./internal/index.test.js";
+import "./functions/index.test.js";
