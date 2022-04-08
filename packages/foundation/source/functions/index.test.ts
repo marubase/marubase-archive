@@ -1,3 +1,4 @@
+import "./is-readable.test.js";
 import "./to-buffer-readable.test.js";
 import "./to-buffer.test.js";
 import "./to-message-readable.test.js";
