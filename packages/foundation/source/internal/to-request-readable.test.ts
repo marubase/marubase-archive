@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Readable } from "stream";
 import { toRequestReadable } from "./to-request-readable.js";
 
-describe("toRequestReadable(request, options", function () {
+describe("toRequestReadable(request, options)", function () {
   context("when request have single header", function () {
     it("should return request readable", async function () {
       const protocol = "HTTP/1.1";
