@@ -52,10 +52,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
-    "@marubase/container": "workspace:^0.0.0"
-  },
-  "peerDependencies": {
+  "dependencies": {
     "@marubase/container": "workspace:^0.0.0"
   }
 }
