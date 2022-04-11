@@ -56,7 +56,7 @@ export interface RequestInterface extends MessageInterface {
 
   setScheme(scheme: string): this;
 
-  setUrl(input: string, base?: string): this;
+  setUrl(href: string, base?: string): this;
   setUrl(url: URL): this;
 }
 
