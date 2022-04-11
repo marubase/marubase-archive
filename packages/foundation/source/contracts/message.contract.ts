@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import { ManagerInterface } from "./manager.contract.js";
 import { MultipartInterface } from "./multipart.contract.js";
 
 export const MessageContract = Symbol("MessageContract");
@@ -7,6 +8,8 @@ export interface MessageInterface {
   readonly body: Readable;
 
   readonly headers: Map<string, string>;
+
+  readonly manager: ManagerInterface;
 
   readonly protocol: MessageProtocol;
 
