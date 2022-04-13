@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import { RouterError } from "../errors/router.error.js";
 import { MAX_HEADERS_SIZE } from "./to-message.js";
 import { RequestRecord } from "./to-request-readable.js";
 
@@ -18,7 +19,7 @@ export async function toRequest(readable: Readable): Promise<RequestRecord> {
       const context = `Parsing request readable.`;
       const problem = `No headers found in the first ${MAX_HEADERS_SIZE} bytes.`;
       const solution = `Please parse a valid request readable.`;
-      throw new Error(`${context} ${problem} ${solution}`);
+      throw new RouterError(`${context} ${problem} ${solution}`, 400);
     }
 
     const separator = `\r\n\r\n`;
@@ -35,7 +36,7 @@ export async function toRequest(readable: Readable): Promise<RequestRecord> {
       const context = `Parsing request readable.`;
       const problem = `No request line found.`;
       const solution = `Please parse a valid request readable.`;
-      throw new Error(`${context} ${problem} ${solution}`);
+      throw new RouterError(`${context} ${problem} ${solution}`, 400);
     }
     rawHeaders.shift();
 

@@ -1,4 +1,5 @@
 import { Readable } from "stream";
+import { RouterError } from "../errors/router.error.js";
 import { MessageRecord } from "./to-message-readable.js";
 
 export const MAX_HEADERS_SIZE = 16384;
@@ -15,7 +16,7 @@ export async function toMessage(readable: Readable): Promise<MessageRecord> {
       const context = `Parsing message readable.`;
       const problem = `No headers found in the first ${MAX_HEADERS_SIZE} bytes.`;
       const solution = `Please parse a valid message readable.`;
-      throw new Error(`${context} ${problem} ${solution}`);
+      throw new RouterError(`${context} ${problem} ${solution}`, 400);
     }
 
     const separator = `\r\n\r\n`;
