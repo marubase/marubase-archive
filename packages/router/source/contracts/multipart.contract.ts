@@ -1,5 +1,5 @@
+import { ContainerInterface } from "@marubase/container";
 import { Readable } from "stream";
-import { ManagerInterface } from "./manager.contract.js";
 import { MessageInterface } from "./message.contract.js";
 
 export const MultipartContract = Symbol("MultipartContract");
@@ -7,9 +7,9 @@ export const MultipartContract = Symbol("MultipartContract");
 export interface MultipartInterface extends AsyncIterable<MessageInterface> {
   readonly boundary: string;
 
-  readonly contentType: string;
+  readonly container: ContainerInterface;
 
-  readonly manager: ManagerInterface;
+  readonly contentType: string;
 
   readonly mimeType: string;
 
