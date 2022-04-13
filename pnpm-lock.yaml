@@ -113,7 +113,7 @@ importers:
   packages/router:
     specifiers:
       '@marubase/container': workspace:^0.0.0
-    dependencies:
+    devDependencies:
       '@marubase/container': link:../container
 
   tools/eslint-plugin:
