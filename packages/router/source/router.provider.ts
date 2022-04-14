@@ -1,13 +1,13 @@
 import { ContainerInterface, ContainerProvider } from "@marubase/container";
+import { MultipartContract } from "./contracts/multipart.contract.js";
+import { Multipart } from "./multipart.js";
 
 export class RouterProvider implements ContainerProvider {
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   public install(container: ContainerInterface): void {
-    /* eslint-disable-line @typescript-eslint/no-empty-function */
+    container.bind(MultipartContract).to(Multipart);
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   public uninstall(container: ContainerInterface): void {
-    /* eslint-disable-line @typescript-eslint/no-empty-function */
+    container.resolver(MultipartContract)?.clearRegistryKey();
   }
 }
