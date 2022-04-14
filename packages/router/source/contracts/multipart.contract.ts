@@ -17,7 +17,7 @@ export interface MultipartInterface extends AsyncIterable<MessageInterface> {
 
   setBoundary(boundary: string): this;
 
-  setContent(content: Readable): this;
+  setContent(readable: Readable): this;
   setContent(...messages: MessageInterface[]): this;
 
   setContentType(contentType: string): this;
