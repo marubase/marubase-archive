@@ -9,15 +9,18 @@ export interface MultipartInterface extends AsyncIterable<MessageInterface> {
 
   readonly container: ContainerInterface;
 
+  readonly content: Readable;
+
   readonly contentType: string;
 
   readonly mimeType: string;
 
   setBoundary(boundary: string): this;
 
+  setContent(content: Readable): this;
+  setContent(...messages: MessageInterface[]): this;
+
   setContentType(contentType: string): this;
 
   setMimeType(mimeType: string): this;
-
-  toStream(): Readable;
 }
