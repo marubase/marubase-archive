@@ -1,3 +1,4 @@
+export * from "./is-multipart.js";
 export * from "./is-readable.js";
 export * from "./to-buffer-readable.js";
 export * from "./to-buffer.js";
