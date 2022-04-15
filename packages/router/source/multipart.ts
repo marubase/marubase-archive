@@ -5,10 +5,17 @@ import {
   injectable,
 } from "@marubase/container";
 import { Readable } from "stream";
-import { MessageInterface } from "./contracts/message.contract.js";
+import {
+  MessageContract,
+  MessageInterface,
+} from "./contracts/message.contract.js";
 import { MultipartInterface } from "./contracts/multipart.contract.js";
+import { RouterError } from "./errors/router.error.js";
 import { isReadable } from "./functions/is-readable.js";
 import { toBufferReadable } from "./functions/to-buffer-readable.js";
+import { toMessage } from "./functions/to-message.js";
+import { toMultipartReadable } from "./functions/to-multipart-readable.js";
+import { toMultipart } from "./functions/to-multipart.js";
 
 @injectable()
 export class Multipart implements MultipartInterface {
@@ -38,8 +45,19 @@ export class Multipart implements MultipartInterface {
   }
 
   public get content(): Readable {
-    // update to support both readable and messages
-    return toBufferReadable(Buffer.from([]));
+    if (typeof this._content === "undefined") {
+      return toBufferReadable(Buffer.from([]));
+    }
+
+    if ("readable" in this._content) {
+      const { readable } = this._content;
+      return readable;
+    }
+
+    const { messages } = this._content;
+    const boundary = this._boundary;
+    const parts = messages.map((message) => message.toStream());
+    return toMultipartReadable({ boundary, epilogue: "", parts, preamble: "" });
   }
 
   public get contentType(): string {
@@ -51,10 +69,39 @@ export class Multipart implements MultipartInterface {
   }
 
   public [Symbol.asyncIterator](): AsyncIterator<MessageInterface> {
-    // update to support both readable and messages
+    if (typeof this._content === "undefined") {
+      return {
+        async next(): Promise<IteratorResult<MessageInterface>> {
+          return { done: true, value: undefined };
+        },
+      };
+    }
+
+    if ("readable" in this._content) {
+      const { readable } = this._content;
+      const boundary = this._boundary;
+      const container = this._container;
+      const iterator = toMultipart(boundary, readable);
+      return {
+        async next(): Promise<IteratorResult<MessageInterface>> {
+          const cursor = await iterator.next();
+          if (cursor.done) return { done: true, value: undefined };
+
+          const { body, headers } = await toMessage(cursor.value);
+          const message = container
+            .resolve<MessageInterface>(MessageContract)
+            .setBody(body)
+            .setHeaders(headers);
+          return { done: false, value: message };
+        },
+      };
+    }
+
+    const { messages } = this._content;
+    const iterator = messages.values();
     return {
       async next(): Promise<IteratorResult<MessageInterface>> {
-        return { done: true, value: undefined };
+        return iterator.next();
       },
     };
   }
@@ -77,12 +124,27 @@ export class Multipart implements MultipartInterface {
   }
 
   public setContentType(contentType: string): this {
-    // match content type or throw error
+    const pattern = /^(multipart\/[0-9A-Za-z]+);\s*boundary="?([^"]+)"?$/;
+    const matches = contentType.match(pattern);
+    if (!matches) {
+      const context = `Setting multipart content type.`;
+      const problem = `Invalid content type format.`;
+      const solution = `Please try again with a valid format.`;
+      throw new RouterError(`${context} ${problem} ${solution}`);
+    }
+    const [, mimeType, boundary] = matches;
+    this._boundary = boundary;
+    this._mimeType = mimeType;
     return this;
   }
 
   public setMimeType(mimeType: string): this {
-    // match mime type or throw error
+    if (!mimeType.match(/^multipart\/[0-9A-Za-z]+$/)) {
+      const context = `Setting multipart mimetype.`;
+      const problem = `Invalid mimetype format.`;
+      const solution = `Please try again with a valid format.`;
+      throw new RouterError(`${context} ${problem} ${solution}`);
+    }
     this._mimeType = mimeType;
     return this;
   }
