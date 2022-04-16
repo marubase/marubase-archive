@@ -46,18 +46,20 @@ export class Multipart implements MultipartInterface {
 
   public get content(): Readable {
     if (typeof this._content === "undefined") {
-      return toBufferReadable(Buffer.from([]));
+      const readable = toBufferReadable(Buffer.from([]));
+      this._content = { readable };
+      return this._content.readable;
     }
-
     if ("readable" in this._content) {
-      const { readable } = this._content;
-      return readable;
+      return this._content.readable;
     }
-
     const { messages } = this._content;
     const boundary = this._boundary;
     const parts = messages.map((message) => message.toStream());
-    return toMultipartReadable({ boundary, epilogue: "", parts, preamble: "" });
+    const multipartRecord = { boundary, epilogue: "", parts, preamble: "" };
+    const readable = toMultipartReadable(multipartRecord);
+    this._content = { readable };
+    return this._content.readable;
   }
 
   public get contentType(): string {
@@ -76,7 +78,6 @@ export class Multipart implements MultipartInterface {
         },
       };
     }
-
     if ("readable" in this._content) {
       const { readable } = this._content;
       const boundary = this._boundary;
@@ -96,7 +97,6 @@ export class Multipart implements MultipartInterface {
         },
       };
     }
-
     const { messages } = this._content;
     const iterator = messages.values();
     return {
